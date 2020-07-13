@@ -3,7 +3,7 @@
 #include "Queue.h"
 #include "AdjugateMatrix.h"
 #include "List.h"
-#define INFINITY 1
+#define INFINITY -1
 
 
 class BFS
@@ -18,7 +18,7 @@ private:
 
 public:
 	BFS(int numOfvertexs);
-	void createBFS(AdjugateMatrix G, int s);
+	void createBFS(AdjugateMatrix& G, int s);
 	List findPath(int s, int t);
 };
 

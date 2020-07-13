@@ -14,7 +14,7 @@ class Queue
 private:
 	int m_Head;
 	int m_Tail;
-	int* m_Data = nullptr; //change to num of vertex
+	int m_Data[100] ; //change to num of vertex
 	int m_MaxSize;
 
 	int AddOne(int x);

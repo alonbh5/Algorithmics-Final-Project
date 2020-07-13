@@ -7,10 +7,10 @@ BFS::BFS(int numOfVertexs)
 	arrSize = numOfVertexs;
 }
 
-void BFS::createBFS(AdjugateMatrix G, int s)
+void BFS::createBFS(AdjugateMatrix& G, int s)
 {
 	initialize();
-	Queue Q(arrSize);
+	Queue Q(arrSize*2);
 	Q.EnQueue(s);
 	d[s] = 0;
 	int u = 0;
@@ -18,7 +18,7 @@ void BFS::createBFS(AdjugateMatrix G, int s)
 	while (!Q.isEmpty())
 	{
 		u = Q.DeQueue();
-		List Adj = G.GetAdjList(u);
+		List Adj = G.GetAdjListByResidual(u);
 		Node* currNode = Adj.Head;
 		int currVertex;
 
