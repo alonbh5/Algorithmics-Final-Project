@@ -8,12 +8,12 @@ class Node
 	int data;
 	Node* next;
 
+public:
 	Node();
+	~Node();
 	Node(Node* ptr, int item);
 	InsertAfter(Node* newnode);
 	DeleteAfter();
-
-
 };
 
 #endif // !_NODE_H
