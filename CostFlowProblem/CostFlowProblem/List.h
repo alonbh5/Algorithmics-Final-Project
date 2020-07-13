@@ -8,10 +8,12 @@
 class List
 {
 	Node* Head;
-	Node* tail;
+	Node* Tail;
 
 public:
 	List();
+	bool IsEmpty();
+	
 
 
 

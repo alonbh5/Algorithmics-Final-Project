@@ -12,8 +12,8 @@ public:
 	Node();
 	~Node();
 	Node(Node* ptr, int item);
-	InsertAfter(Node* newnode);
-	DeleteAfter();
+	void InsertAfter(Node* newnode);
+	Node* DeleteAfter();
 };
 
 #endif // !_NODE_H

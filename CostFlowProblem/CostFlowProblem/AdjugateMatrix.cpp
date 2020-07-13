@@ -3,8 +3,14 @@
 AdjugateMatrix::AdjugateMatrix(int i_NumOfVertex)
 {
 	m_NumOfVertex = i_NumOfVertex;
-	m_MatrixAdj = new int[i_NumOfVertex, i_NumOfVertex];
-	m_MatrixWeight = new int[i_NumOfVertex, i_NumOfVertex];
+	m_MatrixAdj = new int*[i_NumOfVertex];
+	m_MatrixWeight = new int*[i_NumOfVertex];
+	for (int i = 0; i < i_NumOfVertex; i++)
+	{
+		m_MatrixAdj[i] = new int[i_NumOfVertex];
+		m_MatrixWeight[i] = new int[i_NumOfVertex];
+	}
+
 }
 
 AdjugateMatrix::~AdjugateMatrix()

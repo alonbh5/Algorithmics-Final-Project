@@ -17,13 +17,13 @@ Node::Node(Node* ptr, int item)
 
 }
 
-Node::InsertAfter(Node* newnode)
+void Node::InsertAfter(Node* newnode)
 {
 	newnode->next = next;
 	next = newnode;
 }
 
-Node::DeleteAfter()
+Node* Node::DeleteAfter()
 {
 	Node* temp = next;
 	if (next == nullptr)

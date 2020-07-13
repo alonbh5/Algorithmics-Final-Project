@@ -1,10 +1,8 @@
-#include List.h
-#pragma warning (disable:4996)
 
-#include <iostream>
-
+#include "List.h"
 
 List::List()
 {
-
+	Head = nullptr;
+	Tail = nullptr;
 }
