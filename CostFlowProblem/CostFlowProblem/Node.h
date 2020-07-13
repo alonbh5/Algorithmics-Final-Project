@@ -5,10 +5,10 @@
 
 class Node
 {
+public:
 	int data;
 	Node* next;
 
-public:
 	Node();
 	~Node();
 	Node(Node* ptr, int item);

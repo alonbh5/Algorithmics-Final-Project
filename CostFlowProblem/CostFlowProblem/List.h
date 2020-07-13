@@ -13,9 +13,8 @@ class List
 public:
 	List();
 	bool IsEmpty();
-	
-
-
+	void MakeEmpty();
+	void InsertToTail(int data);
 
 };
 
