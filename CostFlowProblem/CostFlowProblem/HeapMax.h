@@ -26,12 +26,15 @@ private:
 	void FixHeap(int IndexOfNode);
 public:
 	Heap(int MaxSize);           //Turn arr[] into heap
+	Heap(PairOfData* Arr, int ArrSize);
 	~Heap();
 	bool IsEmpty();
 	void makeEmpty(int MaxSize); //Allocate memory 
 	PairOfData Max();
 	PairOfData DeleteMax();
 	void Insert(PairOfData item);
+	void Build (PairOfData* Arr, int ArrSize);
+	void IncreaseKey(int place, int newKey);
 };
 
 #endif // !_HEAPMAX_H

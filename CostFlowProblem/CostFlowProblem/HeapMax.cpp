@@ -2,6 +2,11 @@
 
 
 //C'tor: allocate memory for the heap and make the heap empty.
+Heap::Heap(int MaxSize)
+{
+	makeEmpty(MaxSize);
+}
+
 void Heap::makeEmpty(int MaxSize)
 {	
 	m_Data = new PairOfData[MaxSize];
@@ -106,13 +111,34 @@ void Heap::Insert(PairOfData item)
 //C'tor: convert an array which contains n numbers into a heap.
 //Idea: the numbers in places n-1,...,n/2 are leaves.
 //Build small heaps starting from leaves, and fix heaps while going towards the root.
-Heap::Heap(Person A[], int n)
+Heap::Heap(PairOfData* Arr, int ArrSize)
 {
-	heapSize = maxSize = n;
-	int x = 0;
-	data = A;                   //Assign array A to data pointer
-	allocated = 0;              //Memory not allocated by heap
+	m_HeapSize = m_MaxSize = ArrSize;	
+	m_Data = Arr;                   //Assign array A to data pointer
+	m_Allocated = 0;              //Memory not allocated by heap
+	Build(Arr, ArrSize);
+	
+}
 
-	for (int i = (n / 2) - 1; i >= 0; i--) //flyde
-		FixHeap(i, x);
+void Heap::Build(PairOfData* Arr, int ArrSize)
+{
+	for (int i = (ArrSize / 2) - 1; i >= 0; i--) //flyde
+		FixHeap(i);
+}
+
+void Heap::IncreaseKey(int place, int newKey)
+{
+	int i = place;
+	PairOfData temp;
+
+	m_Data[place].key = newKey;	
+	temp = m_Data[place];
+
+	while ((i > 0) && (m_Data[Parent(i)].key < temp.key))
+	{
+		m_Data[i] = m_Data[Parent(i)];
+		i = Parent(i);
+	}
+	m_Data[i] = temp;
+
 }
