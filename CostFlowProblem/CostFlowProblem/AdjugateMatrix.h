@@ -1,7 +1,10 @@
 #pragma once
+
+#include "List.h"
+
 class AdjugateMatrix
 {
-private:
+public:
 
 	int m_NumOfVertex;
 	int** m_MatrixWeight;
@@ -9,11 +12,14 @@ private:
 
 public:
 	AdjugateMatrix(int i_NumOfVertex);
+	AdjugateMatrix(AdjugateMatrix& Other);
 	~AdjugateMatrix();
-	void MakeEmptyGraph(int i_n);
+	void MakeEmptyGraph();
 	bool IsAdjacent(int i_u, int i_v);
-	//list GeAdjList(int i_u);
+	List GetAdjList(int i_u);
 	void AddEdge(int i_u, int i_v, int i_c);
 	void RemoveEdge(int i_u, int i_v);
+	void InitFlow();
+
 };
 

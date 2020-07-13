@@ -7,6 +7,7 @@
 
 class List
 {
+public:
 	Node* Head;
 	Node* Tail;
 
@@ -15,6 +16,7 @@ public:
 	bool IsEmpty();
 	void MakeEmpty();
 	void InsertToTail(int data);
+	void InsertToHead(int data);
 
 };
 
