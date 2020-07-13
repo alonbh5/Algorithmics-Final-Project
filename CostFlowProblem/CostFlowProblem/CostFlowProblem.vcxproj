@@ -19,10 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AdjugateMatrix.h" />
     <ClInclude Include="HeapMax.h" />
     <ClInclude Include="Queue.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AdjugateMatrix.cpp" />
     <ClCompile Include="HeapMax.cpp" />
     <ClCompile Include="Queue.cpp" />
   </ItemGroup>

@@ -3,51 +3,49 @@
 
 Queue::Queue()
 {
-	this->head = 1;
-	this->tail = 0;
+	this->m_Head = 1;
+	this->m_Tail = 0;
 	for (int i = 0; i < MAX_SIZE; i++)
-		this->data[i] = nullptr;
+		this->m_Data[i] = nullptr;
 }
 
 
 Queue::~Queue()
 {
 	for (int i = 0; i < MAX_SIZE; i++)
-		delete this->data[i];
+		delete this->m_Data[i];
 }
 
 void Queue::MakeEmpty()
 {
-	head = 1;
-	tail = 0;
+	m_Head = 1;
+	m_Tail = 0;
 }
 
 bool Queue::isEmpty()
 {
-	return (AddOne(tail) == head);
+	return (AddOne(m_Tail) == m_Head);
 }
 
-int* Queue::front()
+int* Queue::Front()
 {
 	if (isEmpty())
 	{
 		cout << "Error: Queue IS EMPTY :(" << endl;
 		exit(1);
 	}
-	return (data[head]);
-
-
+	return (m_Data[m_Head]);
 }
 
 void Queue::EnQueue(int* item)
 {
-	if (AddOne(AddOne(tail)) == head)
+	if (AddOne(AddOne(m_Tail)) == m_Head)
 	{
-		cout << "Oh no!! Queue IS Full :(" << endl;
+		cout << "Queue IS Full" << endl;
 		exit(2);
 	}
-	tail = AddOne(tail);
-	data[tail] = item;
+	m_Tail = AddOne(m_Tail);
+	m_Data[m_Tail] = item;
 }
 
 int* Queue::DeQueue()
@@ -56,11 +54,11 @@ int* Queue::DeQueue()
 
 	if (isEmpty())
 	{
-		cout << "Error: Queue IS EMPTY :(" << endl;
+		cout << "Error: Queue IS EMPTY" << endl;
 		exit(3);
 	}
-	item = data[head];
-	head = AddOne(head);
+	item = m_Data[m_Head];
+	m_Head = AddOne(m_Head);
 	return item;
 }
 

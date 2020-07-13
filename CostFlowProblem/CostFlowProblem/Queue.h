@@ -7,16 +7,15 @@ using namespace std;
 
 #pragma warning (disable: 4996)
 
-const int MAX_SIZE = 2050;
-
+const int MAX_SIZE = 1000;
 
 class Queue
 {
 
 private:
-	int head;
-	int tail;
-	int* data[MAX_SIZE];
+	int m_Head;
+	int m_Tail;
+	int* m_Data[MAX_SIZE]; //change to num of vertex
 
 	static int AddOne(int x);
 
@@ -28,7 +27,7 @@ public:
 
 	void MakeEmpty();
 	bool isEmpty();
-	int* front();
+	int* Front();
 	void EnQueue(int* item);
 	int* DeQueue();
 
