@@ -4,7 +4,8 @@ class AdjugateMatrix
 private:
 
 	int m_NumOfVertex;
-	int* m_Matrix;
+	int* m_MatrixWeight;
+	int* m_MatrixAdj;
 
 public:
 	AdjugateMatrix(int i_NumOfVertex);

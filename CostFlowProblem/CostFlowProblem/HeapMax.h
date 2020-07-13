@@ -5,8 +5,6 @@
 
 using namespace std;
 
-
-
 struct PairOfData
 {
 	int data; //vertex
