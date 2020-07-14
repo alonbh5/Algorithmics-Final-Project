@@ -11,12 +11,12 @@ void printMaxFlowProblemResultBFS(BFS& myBFS, AdjancencyMatrix& GraphResult, Adj
 void maximumFlowProblemByDijkstra(AdjancencyMatrix& Graph, int n, int m, int s, int t);
 void printMaxFlowProblemResultDijkstra(Dijkstra& myDijkstra, AdjancencyMatrix& GraphResult, AdjancencyMatrix& GraphResidual, int S, int T, int numOfIterations);
 
+
 int main()
 {
 	int n, m, s, t;
 	string file_name = "graph.txt";
-	AdjancencyMatrix* Graph = createGraphFromFile(n, m, s, t, file_name);
-	//maximumFlowProblemByBFS((*Graph), n,m,s-1,t-1); /// change to pointer graph
+	AdjancencyMatrix* Graph = createGraphFromFile(n, m, s, t, file_name);	
 	maximumFlowProblemByDijkstra((*Graph), n, m, s - 1, t - 1);
 	delete Graph;
 	return 0;

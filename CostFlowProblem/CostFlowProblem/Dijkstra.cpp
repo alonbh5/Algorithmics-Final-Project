@@ -43,13 +43,11 @@ void Dijkstra::createDijkstraTree(AdjancencyMatrix& i_Graph, int i_S)
 void Dijkstra::relax(int i_U, int i_V, int i_S, AdjancencyMatrix& Graph, HeapMax& Q)
 {
 
-	if (m_Degree[i_V] < m_Degree[i_U] + Graph.m_Matrix[i_U][i_V].ResidualFlow && i_V != i_S) // -1 < 
-		// 
+	if (m_Degree[i_V] < m_Degree[i_U] + Graph.m_Matrix[i_U][i_V].ResidualFlow && i_V != i_S) 		
 	{
-		m_Degree[i_V] = m_Degree[i_U] + Graph.m_Matrix[i_U][i_V].ResidualFlow;
-		Graph.AddFlow()
+		m_Degree[i_V] = m_Degree[i_U] + Graph.m_Matrix[i_U][i_V].ResidualFlow;	;
 		m_Parent[i_V] = i_U;
-		Q.IncreaseKey(i_V, m_Degree[i_V]);
+		Q.IncreaseKey(i_V, m_Degree[i_V]); 
 	}
 }
 

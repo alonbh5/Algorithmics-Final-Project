@@ -30,7 +30,7 @@ public:
 	~HeapMax();
 	bool IsEmpty();
 	void makeEmpty(int i_MaxSize); //Allocate memory 
-	PairOfData Max();
+	int Max();
 	int DeleteMax();
 	void Insert(PairOfData i_Item);
 	void Build(int* i_DataArr, int i_ArrSize);

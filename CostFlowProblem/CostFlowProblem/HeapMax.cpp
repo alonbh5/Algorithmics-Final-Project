@@ -33,9 +33,9 @@ bool HeapMax::IsEmpty()
 	return (this->m_HeapSize == 0);
 }
 
-PairOfData HeapMax::Max()
+int HeapMax::Max()
 {
-	return this->m_Data[0];
+	return this->m_Data[0].data;
 }
 
 //Private Member functions of Heap class
@@ -90,7 +90,7 @@ int HeapMax::DeleteMax()
 	m_HeapSize--;
 	m_Data[0] = m_Data[m_HeapSize];
 	FixHeap(0);
-	return (max.data);
+	return (max.key);
 }
 
 //Add a new leaf for item, and swap upwards until item is in its correct position.
@@ -132,8 +132,8 @@ void HeapMax::createArrPairs(int* i_DataArr, int i_ArrSize)
 	
 	for (int i = 0; i < i_ArrSize; i++)
 	{
-		m_Data[i].data = i;
-		m_Data[i].key = i_DataArr[i];
+		m_Data[i].data = i; //vertex
+		m_Data[i].key = i_DataArr[i]; //witgh
 	}
 	
 }
@@ -142,10 +142,11 @@ void HeapMax::IncreaseKey(int i_Place, int i_NewKey)
 {
 	int key = i_Place;
 	PairOfData temp;
-	i_Place = findPlaceOfKey(key);
-	int i = i_Place;
-	m_Data[i_Place].key = i_NewKey;	
-	temp = m_Data[i_Place];
+	int i = findPlaceOfKey(key);
+	
+	m_Data[i].key = i_NewKey;
+	temp = m_Data[i];
+	std::swap(m_Data[i], m_Data[m_HeapSize]);	
 
 	while ((i > 0) && (m_Data[Parent(i)].key < temp.key))
 	{
@@ -153,6 +154,7 @@ void HeapMax::IncreaseKey(int i_Place, int i_NewKey)
 		i = Parent(i);
 	}
 	m_Data[i] = temp;
+
 }
 
 int HeapMax::findPlaceOfKey(int i_Data)
