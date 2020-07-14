@@ -16,6 +16,8 @@ int main()
 	maximumFlowProblemByBFS((*Graph), n,m,s-1,t-1); /// change to pointer graph
 	delete Graph;
 	return 0;
+
+	//fix problem sometimes in the end of the main or when i print max flow;
 }
 
 AdjancencyMatrix* createGraphFromFile(int& n, int& m, int& s, int& t, string file_name)
@@ -42,11 +44,10 @@ AdjancencyMatrix* createGraphFromFile(int& n, int& m, int& s, int& t, string fil
 void maximumFlowProblemByBFS(AdjancencyMatrix& Graph, int n, int m, int s, int t)
 {
 	BFS myBFS(n);
-	AdjancencyMatrix GraphResidual(n);
+	AdjancencyMatrix GraphResidual(n), GraphResult(n);
 	GraphResidual.MakeGraphResidual(Graph);
 	List* improvePath = nullptr;
-	int residualOfPath;
-	int numOfIterations = 0;
+	int residualOfPath, numOfIterations = 0;
 
 	do {
 		if (improvePath != nullptr)
@@ -62,8 +63,6 @@ void maximumFlowProblemByBFS(AdjancencyMatrix& Graph, int n, int m, int s, int t
 		}
 	} while (!improvePath->IsEmpty());
 
-	AdjancencyMatrix GraphResult = Graph;
-	GraphResult.InitFlow();
 	GraphResult.CopyOnlyFlowEdges(GraphResidual);
 	printMaxFlowProblemResultBFS(myBFS,GraphResult,GraphResidual,s,t,numOfIterations);
 }
