@@ -72,7 +72,6 @@ void maximumFlowProblemByBFS(AdjancencyMatrix& Graph, int n, int m, int s, int t
 void printMaxFlowProblemResultBFS(BFS& myBFS, AdjancencyMatrix& GraphResult, AdjancencyMatrix& GraphResidual, int S, int T, int numOfIterations)
 {
 	int maxFlow;
-	//GraphResult.PrintEdges();
 	myBFS.createBFSTree(GraphResidual, S);
 	List* minCutS = myBFS.MinCutGroupS(S);
 	List* minCutT = myBFS.MinCutGroupT(T);
