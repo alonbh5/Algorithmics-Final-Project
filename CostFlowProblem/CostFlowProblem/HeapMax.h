@@ -1,5 +1,6 @@
 #ifndef _HEAPMAX_H
 #define _HEAPMAX_H
+
 #pragma warning (disable:4996)
 #include <iostream>
 using namespace std;
@@ -10,7 +11,7 @@ struct PairOfData
 	int key; //weight
 };
 
-class Heap
+class HeapMax
 {
 private:
 	PairOfData* m_Data;
@@ -24,16 +25,18 @@ private:
 	void FixHeap(int i_NodeIdx);
 
 public:
-	Heap(int i_MaxSize);           //Turn arr[] into heap
-	Heap(PairOfData* i_DataArr, int i_ArrSize);
-	~Heap();
+	HeapMax(int i_MaxSize);           //Turn arr[] into heap
+	HeapMax() = default;
+	~HeapMax();
 	bool IsEmpty();
 	void makeEmpty(int i_MaxSize); //Allocate memory 
 	PairOfData Max();
-	PairOfData DeleteMax();
+	int DeleteMax();
 	void Insert(PairOfData i_Item);
-	void Build (PairOfData* i_DataArr, int i_ArrSize);
+	void Build(int* i_DataArr, int i_ArrSize);
 	void IncreaseKey(int i_Place, int i_NewKey);
+	int findPlaceOfKey(int i_Key);
+	void createArrPairs(int* i_DataArr, int i_ArrSize);
 };
 
 #endif // !_HEAPMAX_H

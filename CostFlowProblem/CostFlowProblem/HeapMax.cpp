@@ -2,21 +2,25 @@
 
 
 //C'tor: allocate memory for the heap and make the heap empty.
-Heap::Heap(int i_MaxSize)
+HeapMax::HeapMax(int i_MaxSize)
 {
-	makeEmpty(i_MaxSize);
+	//makeEmpty(i_MaxSize);
+	m_MaxSize = i_MaxSize;
+	m_Data = new PairOfData[i_MaxSize];
+	m_HeapSize = 0;
+	m_Allocated = true;
 }
 
 //D'tor: delete memory only if allocates by heap
-Heap::~Heap()
+HeapMax::~HeapMax()
 {
-	if (m_Allocated)
-		delete[] m_Data;
+	//if (m_Allocated)
+	//	delete (this->m_Data);
 	m_Data = nullptr;
 }
 
 
-void Heap::makeEmpty(int i_MaxSize)
+void HeapMax::makeEmpty(int i_MaxSize)
 {
 	m_Data = new PairOfData[i_MaxSize];
 	m_MaxSize = i_MaxSize;
@@ -24,34 +28,34 @@ void Heap::makeEmpty(int i_MaxSize)
 	m_Allocated = true;
 }
 
-bool Heap::IsEmpty()
+bool HeapMax::IsEmpty()
 {
 	return (this->m_HeapSize == 0);
 }
 
-PairOfData Heap::Max()
+PairOfData HeapMax::Max()
 {
 	return this->m_Data[0];
 }
 
 //Private Member functions of Heap class
 
-int Heap::Parent(int i_NodeIdx)
+int HeapMax::Parent(int i_NodeIdx)
 {
 	return (i_NodeIdx - 1) / 2;
 }
 
-int Heap::Left(int i_NodeIdx)
+int HeapMax::Left(int i_NodeIdx)
 {
 	return (2 * i_NodeIdx + 1);
 }
 
-int Heap::Right(int i_NodeIdx)
+int HeapMax::Right(int i_NodeIdx)
 {
 	return (2 * i_NodeIdx + 2);
 }
 
-void Heap::FixHeap(int i_NodeIdx)    //Fixes the heap that has node as root
+void HeapMax::FixHeap(int i_NodeIdx)    //Fixes the heap that has node as root
 {
 	int max;
 	int left = Left(i_NodeIdx);
@@ -74,7 +78,7 @@ void Heap::FixHeap(int i_NodeIdx)    //Fixes the heap that has node as root
 }
 
 //Delete Maximum which is found in the root of heap, and fix heap.
-PairOfData Heap::DeleteMax()
+int HeapMax::DeleteMax()
 {
 	if (m_HeapSize < 1)
 	{
@@ -86,11 +90,11 @@ PairOfData Heap::DeleteMax()
 	m_HeapSize--;
 	m_Data[0] = m_Data[m_HeapSize];
 	FixHeap(0);
-	return (max);
+	return (max.data);
 }
 
 //Add a new leaf for item, and swap upwards until item is in its correct position.
-void Heap::Insert(PairOfData i_Item)
+void HeapMax::Insert(PairOfData i_Item)
 {
 	if (m_HeapSize == m_MaxSize)
 	{
@@ -112,25 +116,34 @@ void Heap::Insert(PairOfData i_Item)
 //C'tor: convert an array which contains n numbers into a heap.
 //Idea: the numbers in places n-1,...,n/2 are leaves.
 //Build small heaps starting from leaves, and fix heaps while going towards the root.
-Heap::Heap(PairOfData* i_DataArr, int i_ArrSize)
-{
-	m_HeapSize = m_MaxSize = i_ArrSize;	
-	m_Data = i_DataArr;                   //Assign array A to data pointer
-	m_Allocated = 0;              //Memory not allocated by heap
-	Build(i_DataArr, i_ArrSize);
-	
-}
 
-void Heap::Build(PairOfData* i_DataArr, int i_ArrSize)
-{
+
+void HeapMax::Build(int* i_DataArr, int i_ArrSize)
+{	
+	createArrPairs(i_DataArr, i_ArrSize);
+	m_HeapSize = m_MaxSize = i_ArrSize;		             
+
 	for (int i = (i_ArrSize / 2) - 1; i >= 0; i--) //flyde
 		FixHeap(i);
 }
 
-void Heap::IncreaseKey(int i_Place, int i_NewKey)
+void HeapMax::createArrPairs(int* i_DataArr, int i_ArrSize)
 {
-	int i = i_Place;
+	
+	for (int i = 0; i < i_ArrSize; i++)
+	{
+		m_Data[i].data = i;
+		m_Data[i].key = i_DataArr[i];
+	}
+	
+}
+
+void HeapMax::IncreaseKey(int i_Place, int i_NewKey)
+{
+	int key = i_Place;
 	PairOfData temp;
+	i_Place = findPlaceOfKey(key);
+	int i = i_Place;
 	m_Data[i_Place].key = i_NewKey;	
 	temp = m_Data[i_Place];
 
@@ -140,4 +153,16 @@ void Heap::IncreaseKey(int i_Place, int i_NewKey)
 		i = Parent(i);
 	}
 	m_Data[i] = temp;
+}
+
+int HeapMax::findPlaceOfKey(int i_Data)
+{
+	for (int i = 0; i < m_HeapSize; i++)
+	{
+		if (m_Data[i].data == i_Data)
+		{
+			return i;
+		}
+	}
+	return -1;
 }

@@ -21,19 +21,25 @@
   <ItemGroup>
     <ClInclude Include="AdjancencyMatrix.h" />
     <ClInclude Include="BFS.h" />
+    <ClInclude Include="Dijkstra.h" />
     <ClInclude Include="HeapMax.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Queue.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AdjancencyMatrix.cpp" />
     <ClCompile Include="BFS.cpp" />
+    <ClCompile Include="Dijkstra.cpp" />
     <ClCompile Include="HeapMax.cpp" />
     <ClCompile Include="List.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="Queue.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CostFlowProblem.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

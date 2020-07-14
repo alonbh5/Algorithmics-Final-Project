@@ -2,9 +2,25 @@
 
 BFS::BFS(int i_NumOfVertices)
 {
-	this->m_Degree = new int(i_NumOfVertices);
-	this->m_Parent = new int(i_NumOfVertices);
+	this->m_Degree = new int[i_NumOfVertices];
+	this->m_Parent = new int[i_NumOfVertices];
 	this->m_Size = i_NumOfVertices;
+}
+
+//BFS::BFS(BFS& Other)
+//{
+//}
+
+BFS::~BFS()
+{
+	if (m_Degree != nullptr)
+	{
+		delete[] m_Degree;
+	}
+	if (m_Parent != nullptr)
+	{
+		delete[] m_Parent;
+	}
 }
 
 

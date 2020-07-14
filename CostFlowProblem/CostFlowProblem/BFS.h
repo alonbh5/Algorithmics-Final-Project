@@ -17,6 +17,8 @@ private:
 
 public:
 	BFS(int i_NumOfVertices);
+	//BFS(BFS& Other);
+	~BFS();
 	void createBFSTree(AdjancencyMatrix& i_Graph, int i_S);
 	List* FindImprovePath(int i_T);
 	List* MinCutGroupS(int i_S);

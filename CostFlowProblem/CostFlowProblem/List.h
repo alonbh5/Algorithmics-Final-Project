@@ -14,6 +14,7 @@ private:
 
 public:
 	List();
+	List(List& Other);
 	~List();
 	bool IsEmpty();
 	void MakeEmpty();
@@ -21,7 +22,6 @@ public:
 	void InsertToHead(int data);
 	Node* GetHead();
 	Node* GetTail();
-	void PrintList();
 	friend ostream& operator<<(ostream& os, const List& obj);
 
 };

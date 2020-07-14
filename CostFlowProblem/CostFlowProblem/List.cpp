@@ -6,8 +6,13 @@ List::List()
 	MakeEmpty();
 }
 
+List::List(List& Other)
+{
+}
+
 List::~List()
 {
+	// in book 
 	if (!this->IsEmpty())
 	{
 		Node* currNode = m_Head;
