@@ -5,35 +5,36 @@ using namespace std;
 
 int FindMinResidual(List* i_Path, AdjancencyMatrix& i_Graph);
 void MaximumFlowProblemByBFS(AdjancencyMatrix& i_Graph, int n, int m, int s, int t);
-void createGraphFromFile(AdjancencyMatrix& Grpah);
+AdjancencyMatrix* createGraphFromFile(int& n, int& m, int& s, int& t, string file_name);
 void printMaxFlowProblemResultBFS(BFS& myBFS, AdjancencyMatrix& GraphResult, AdjancencyMatrix& GraphResidual, int S, int T, int numOfIterations);
 
-void main()
+int main()
 {
-	//file..
-	int n = 6;
-	int m = 10;
-	int s = 0;
-	int t = 5;
-	AdjancencyMatrix Graph(n);
-	createGraphFromFile(Graph);
-	MaximumFlowProblemByBFS(Graph, n,m,s,t);
+	int n, m, s, t;
+	string file_name = "graph.txt";
+	AdjancencyMatrix* Graph = createGraphFromFile(n, m, s, t, file_name);
+	MaximumFlowProblemByBFS((*Graph), n,m,s-1,t-1); /// change to pointer graph
+	delete Graph;
+	return 0;
 
 }
 
-
-void createGraphFromFile(AdjancencyMatrix& Graph)
+AdjancencyMatrix* createGraphFromFile(int& n, int& m, int& s, int& t, string file_name)
 {
-	Graph.AddEdge(0, 1, 16);
-	Graph.AddEdge(0, 2, 13);
-	Graph.AddEdge(1, 2, 10);
-	Graph.AddEdge(2, 1, 4);
-	Graph.AddEdge(1, 3, 12);
-	Graph.AddEdge(3, 2, 9);
-	Graph.AddEdge(2, 4, 14);
-	Graph.AddEdge(4, 3, 7);
-	Graph.AddEdge(4, 5, 4);
-	Graph.AddEdge(3, 5, 20);
+	ifstream in_file(file_name, ios::in);
+	int vertexV, vertexU, weightEdge;
+	if (!in_file)
+		exit(-1);
+
+	in_file >> n >> m >> s >> t;
+	AdjancencyMatrix* Graph = new AdjancencyMatrix(n);
+
+	for (int i = 0; i < m; i++)
+	{
+		in_file >> vertexV >> vertexU >> weightEdge;
+		Graph->AddEdge(vertexV - 1, vertexU - 1, weightEdge);
+	}
+	return Graph;
 }
 
 
@@ -65,9 +66,7 @@ void MaximumFlowProblemByBFS(AdjancencyMatrix& Graph, int n, int m, int s, int t
 	AdjancencyMatrix GraphResult = Graph;
 	GraphResult.InitFlow();
 	GraphResult.CopyOnlyFlowEdges(GraphResidual);
-
 	printMaxFlowProblemResultBFS(myBFS,GraphResult,GraphResidual,s,t,numOfIterations);
-
 }
 
 void printMaxFlowProblemResultBFS(BFS& myBFS, AdjancencyMatrix& GraphResult, AdjancencyMatrix& GraphResidual, int S, int T, int numOfIterations)
