@@ -21,14 +21,14 @@ void BFS::createBFSTree(AdjancencyMatrix& i_Graph, int i_S)
 		Node* currNode = adjList->GetHead();
 		while (currNode)
 		{
-			currVertex=currNode->m_Data;
+			currVertex=currNode->GetData();
 			if (m_Degree[currVertex] == Infinity)
 			{
 				m_Degree[currVertex] = m_Degree[u] + 1;
 				m_Parent[currVertex] = u;
 				Q.EnQueue(currVertex);
 			}
-			currNode = currNode->m_Next;
+			currNode = currNode->GetNext();
 		}
 		delete adjList;
 	}
