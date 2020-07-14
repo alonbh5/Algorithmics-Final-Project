@@ -1,22 +1,29 @@
-#include "AdjugateMatrix.h"
+#include "AdjancencyMatrix.h"
 #include "BFS.h"
+#include <fstream>
+using namespace std;
 
+int FindMinResidual(List* i_Path, AdjancencyMatrix& i_Graph);
+void MaximumFlowProblemByBFS(AdjancencyMatrix& i_Graph, int n, int m, int s, int t);
+void createGraphFromFile(AdjancencyMatrix& Grpah);
+void printMaxFlowProblemResultBFS(BFS& myBFS, AdjancencyMatrix& GraphResult, AdjancencyMatrix& GraphResidual, int S, int T, int numOfIterations);
 
-int findMinResidual(List& path, AdjugateMatrix& graph);
-
-void main(char args[])
+void main()
 {
 	//file..
-
 	int n = 6;
 	int m = 10;
 	int s = 0;
 	int t = 5;
-	List improvePath;
-	BFS myBFS(n);
-	AdjugateMatrix Graph(n);
+	AdjancencyMatrix Graph(n);
+	createGraphFromFile(Graph);
+	MaximumFlowProblemByBFS(Graph, n,m,s,t);
+
+}
 
 
+void createGraphFromFile(AdjancencyMatrix& Graph)
+{
 	Graph.AddEdge(0, 1, 16);
 	Graph.AddEdge(0, 2, 13);
 	Graph.AddEdge(1, 2, 10);
@@ -27,51 +34,80 @@ void main(char args[])
 	Graph.AddEdge(4, 3, 7);
 	Graph.AddEdge(4, 5, 4);
 	Graph.AddEdge(3, 5, 20);
-
-	AdjugateMatrix GraphResidual(n);
-	GraphResidual.MakeGraphResidual(Graph);
-	GraphResidual.PrintEdges();
-	AdjugateMatrix GraphResult = Graph;
-	GraphResult.InitFlow();
-	int residualOfPath;
-
-
-	do {		
-		myBFS.createBFS(GraphResidual, s);
-		improvePath = myBFS.findPath(s, t);
-
-		if (!improvePath.IsEmpty())
-		{
-			residualOfPath = findMinResidual(improvePath, GraphResidual);
-			GraphResidual.AddFlow(improvePath, residualOfPath);
-		}
-	} while (!improvePath.IsEmpty());
-
-	GraphResult.CopyOnlyFlowEdges(GraphResidual);
-	std::cout << std::endl;
-	GraphResult.PrintEdges();
 }
 
-int findMinResidual(List& path, AdjugateMatrix& graph)
+
+
+//----------------------------------------------------------------//
+void MaximumFlowProblemByBFS(AdjancencyMatrix& Graph, int n, int m, int s, int t)
 {
-	Node* currentNode = path.Head;	
+	BFS myBFS(n);
+	AdjancencyMatrix GraphResidual(n);
+	GraphResidual.MakeGraphResidual(Graph);
+	List* improvePath = nullptr;
+	int residualOfPath;
+	int numOfIterations = 0;
+
+	do {
+		if (improvePath != nullptr)
+			delete improvePath;
+
+		myBFS.createBFSTree(GraphResidual, s);
+		improvePath = myBFS.FindImprovePath(t);
+		if (!improvePath->IsEmpty())
+		{
+			numOfIterations++;
+			residualOfPath = FindMinResidual(improvePath, GraphResidual);
+			GraphResidual.AddFlow(improvePath, residualOfPath);
+		}
+	} while (!improvePath->IsEmpty());
+
+	AdjancencyMatrix GraphResult = Graph;
+	GraphResult.InitFlow();
+	GraphResult.CopyOnlyFlowEdges(GraphResidual);
+
+	printMaxFlowProblemResultBFS(myBFS,GraphResult,GraphResidual,s,t,numOfIterations);
+
+}
+
+void printMaxFlowProblemResultBFS(BFS& myBFS, AdjancencyMatrix& GraphResult, AdjancencyMatrix& GraphResidual, int S, int T, int numOfIterations)
+{
+	//GraphResult.PrintEdges();
+
+	//----------------------------//
+	myBFS.createBFSTree(GraphResidual, S);
+	List* minCutS = myBFS.MinCutGroupS(S);
+	List* minCutT = myBFS.MinCutGroupT(T);
+	int maxFlow = GraphResult.MaxFlow(S);
+	cout << "BFS Methods" << endl;
+	cout << "Max Flow = " << maxFlow << endl;
+	cout << "Min Cut: S= "; // CHANGE TO OPERATOR <<
+	minCutS->PrintList();	// CHANGE TO OPERATOR <<
+	cout << "Min Cut: T= ";// CHANGE TO OPERATOR <<
+	minCutT->PrintList();	// CHANGE TO OPERATOR <<
+	cout << endl;
+	cout << "Number of iterations = " << numOfIterations << endl;
+	//----------------------------//
+	delete minCutS;
+	delete minCutT;
+}
+int FindMinResidual(List* i_Path, AdjancencyMatrix& i_Graph)
+{
+	Node* currentNode = i_Path->GetHead();	
 	int min;
 	int u, v;
 
-	min = 10000000;
+	min = 10000000; // CHANGEIT
 
-	while (currentNode->next)
+	while (currentNode->m_Next)
 	{
-		u = currentNode->data;
-		v = currentNode->next->data;
-
-		if (graph.m_Matrix[u][v].ResidualFlow < min)
+		u = currentNode->m_Data;
+		v = currentNode->m_Next->m_Data;
+		if (i_Graph.m_Matrix[u][v].ResidualFlow < min)
 		{
-			min = graph.m_Matrix[u][v].ResidualFlow;
+			min = i_Graph.m_Matrix[u][v].ResidualFlow;
 		}
-
-		currentNode = currentNode->next;
+		currentNode = currentNode->m_Next;
 	}
-
 	return min;
 }

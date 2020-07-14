@@ -1,22 +1,21 @@
 #include "Queue.h"
 
 
-Queue::Queue(int MaxSize)
+Queue::Queue(int i_MaxSize)
 {
-	//this->m_Data = new int(MaxSize);
-	m_MaxSize = MaxSize;
+	this->m_Data = new int[i_MaxSize];
+	m_MaxSize = i_MaxSize;
 	this->m_Head = 1;
 	this->m_Tail = 0;
-	//for (int i = 0; i < MaxSize; i++)
-	//{
-	//	this->m_Data[i] = 0;
-	//}
+	for (int i = 0; i < i_MaxSize; i++)
+	{
+		this->m_Data[i] = 0;
+	}
 }
-
 
 Queue::~Queue()
 {
-	//delete[] (this->m_Data);
+	delete[] (this->m_Data);
 }
 
 void Queue::MakeEmpty()
@@ -40,7 +39,7 @@ int Queue::Front()
 	return (m_Data[m_Head]);
 }
 
-void Queue::EnQueue(int item)
+void Queue::EnQueue(int i_Utem)
 {
 	if (AddOne(AddOne(m_Tail)) == m_Head)
 	{
@@ -48,7 +47,7 @@ void Queue::EnQueue(int item)
 		exit(2);
 	}
 	m_Tail = AddOne(m_Tail);
-	m_Data[m_Tail] = item;
+	m_Data[m_Tail] = i_Utem;
 }
 
 int Queue::DeQueue()

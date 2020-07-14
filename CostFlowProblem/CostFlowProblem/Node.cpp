@@ -1,32 +1,33 @@
 #include "Node.h"
 
-Node::Node()
+Node::Node(int i_Item)
 {
-	next = nullptr;
+	m_Data = i_Item;
+	m_Next = nullptr;
 }
+
+Node::Node(Node* i_Ptr, int i_Item)
+{
+	m_Data = i_Item;
+	m_Next = i_Ptr;
+}
+
 
 Node::~Node()
 {
-	next = nullptr;
-}
-
-Node::Node(Node* ptr, int item)
-{
-	data = item;
-	next = ptr;
-
+	m_Next = nullptr;
 }
 
 void Node::InsertAfter(Node* newnode)
 {
-	newnode->next = next;
-	next = newnode;
+	newnode->m_Next = m_Next;
+	m_Next = newnode;
 }
 
 Node* Node::DeleteAfter()
 {
-	Node* temp = next;
-	if (next == nullptr)
+	Node* temp = m_Next;
+	if (m_Next == nullptr)
 	{
 		return nullptr;
 	}

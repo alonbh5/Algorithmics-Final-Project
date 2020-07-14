@@ -6,15 +6,35 @@ List::List()
 	MakeEmpty();
 }
 
+List::~List()
+{
+	if (!this->IsEmpty())
+	{
+		Node* currNode = m_Head;
+		Node* nextNode = nullptr;
+		while (currNode->m_Next)
+		{
+			nextNode = currNode->m_Next;
+			delete currNode;
+			currNode = nextNode;
+		}
+		if (currNode)
+		{
+			delete currNode;
+		}
+	}
+
+}
+
 void List::MakeEmpty()
 {
-	Head = nullptr;
-	Tail = nullptr;
+	m_Head = nullptr;
+	m_Tail = nullptr;
 }
 
 bool List::IsEmpty()
 {
-	return (Head == nullptr);
+	return (m_Head == nullptr);
 }
 
 void List::InsertToTail(int data)
@@ -22,13 +42,13 @@ void List::InsertToTail(int data)
 	Node* newNode = new Node(nullptr, data);
 	if (IsEmpty())
 	{
-		Head = newNode;
+		m_Head = newNode;
 	}
 	else
 	{
-		Tail->next = newNode;
+		m_Tail->m_Next = newNode;
 	}
-	Tail = newNode;
+	m_Tail = newNode;
 }
 
 void List::InsertToHead(int data)
@@ -36,16 +56,36 @@ void List::InsertToHead(int data)
 	Node* newNode = new Node(nullptr, data);
 	if (IsEmpty())
 	{
-		Head = newNode;
-		Tail = newNode;
+		m_Head = newNode;
+		m_Tail = newNode;
 	}
 	else
 	{
-		newNode->next = Head;
-		Head = newNode;
+		newNode->m_Next = m_Head;
+		m_Head = newNode;
 	}
 }
 
+Node* List::GetHead()
+{
+	return m_Head;
+}
+
+Node* List::GetTail()
+{
+	return m_Tail;
+}
+
+void List::PrintList()
+{
+	Node* currNode = m_Head;
+	while (currNode)
+	{
+		std::cout << " " << currNode->m_Data;
+		currNode = currNode->m_Next;
+	}
+	std::cout << ".";
+}
 
 
 

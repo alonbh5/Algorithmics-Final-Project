@@ -1,6 +1,6 @@
-#include "AdjugateMatrix.h"
+#include "AdjancencyMatrix.h"
 
-AdjugateMatrix::AdjugateMatrix(int i_NumOfVertex)
+AdjancencyMatrix::AdjancencyMatrix(int i_NumOfVertex)
 {
 	m_NumOfVertex = i_NumOfVertex;
 	m_Matrix = new EdgeInfo*[i_NumOfVertex];
@@ -12,26 +12,30 @@ AdjugateMatrix::AdjugateMatrix(int i_NumOfVertex)
 	MakeEmptyGraph();
 }
 
-AdjugateMatrix::AdjugateMatrix(AdjugateMatrix& Other)
+AdjancencyMatrix::AdjancencyMatrix(AdjancencyMatrix& i_Other)
 {
-	this->m_NumOfVertex = Other.m_NumOfVertex;
+	this->m_NumOfVertex = i_Other.m_NumOfVertex;
 	this->m_Matrix = new EdgeInfo*[this->m_NumOfVertex];
 	for (int i = 0; i < this->m_NumOfVertex; i++)
 	{
 		this->m_Matrix[i] = new EdgeInfo[this->m_NumOfVertex];
 		for (int j = 0; j < this->m_NumOfVertex; j++)
 		{
-			this->m_Matrix[i][j] = Other.m_Matrix[i][j];
+			this->m_Matrix[i][j] = i_Other.m_Matrix[i][j];
 		}
 	}
 }
 
-AdjugateMatrix::~AdjugateMatrix()
+AdjancencyMatrix::~AdjancencyMatrix()
 {
+	for (int i = 0; i < m_NumOfVertex; i++)
+	{
+		delete[] this->m_Matrix[i];
+	}
 	delete[] m_Matrix;
 }
 
-void AdjugateMatrix::MakeEmptyGraph()
+void AdjancencyMatrix::MakeEmptyGraph()
 {
 	for (int i = 0; i < m_NumOfVertex; i++)
 	{
@@ -45,28 +49,28 @@ void AdjugateMatrix::MakeEmptyGraph()
 	}
 }
 
-bool AdjugateMatrix::IsAdjacent(int i_u, int i_v)
+bool AdjancencyMatrix::IsAdjacent(int i_U, int i_V)
 {
-	return (m_Matrix[i_u][i_v].isExist);
+	return (m_Matrix[i_U][i_V].isExist);
 }
 
-void AdjugateMatrix::AddEdge(int i_u, int i_v, int i_c)
+void AdjancencyMatrix::AddEdge(int i_U, int i_V, int i_Weight)
 {
-	if (!m_Matrix[i_u][i_v].isExist)
+	if (!m_Matrix[i_U][i_V].isExist)
 	{
-		m_Matrix[i_u][i_v].isExist = true;
-		m_Matrix[i_u][i_v].currentFlow = 0;
-		m_Matrix[i_u][i_v].maxFlow = i_c;
-		m_Matrix[i_u][i_v].ResidualFlow = i_c;
+		m_Matrix[i_U][i_V].isExist = true;
+		m_Matrix[i_U][i_V].currentFlow = 0;
+		m_Matrix[i_U][i_V].maxFlow = i_Weight;
+		m_Matrix[i_U][i_V].ResidualFlow = i_Weight;
 	}
 }
 
-void AdjugateMatrix::RemoveEdge(int i_u, int i_v)
+void AdjancencyMatrix::RemoveEdge(int i_U, int i_V)
 {
-	m_Matrix[i_u][i_v].isExist = false;
+	m_Matrix[i_U][i_V].isExist = false;
 }
 
-void AdjugateMatrix::InitFlow()
+void AdjancencyMatrix::InitFlow()
 {
 	for (int i = 0; i < m_NumOfVertex; i++)
 	{
@@ -78,7 +82,7 @@ void AdjugateMatrix::InitFlow()
 	}
 }
 
-void AdjugateMatrix::PrintEdges()
+void AdjancencyMatrix::PrintEdges()
 {
 	for (int i = 0; i < this->m_NumOfVertex; i++)
 	{
@@ -93,24 +97,19 @@ void AdjugateMatrix::PrintEdges()
 	}
 }
 
-void AdjugateMatrix::MakeGraphResidual(AdjugateMatrix& Other)
+void AdjancencyMatrix::MakeGraphResidual(AdjancencyMatrix& i_Other)
 {
-	this->m_NumOfVertex = Other.m_NumOfVertex;	
+	this->m_NumOfVertex = i_Other.m_NumOfVertex;	
 	for (int i = 0; i < this->m_NumOfVertex; i++)
 	{		
 		for (int j = 0; j < this->m_NumOfVertex; j++)
 		{
-			if (Other.m_Matrix[i][j].maxFlow != 0)
+			if (i_Other.m_Matrix[i][j].maxFlow != 0)
 			{
-				this->m_Matrix[i][j] = Other.m_Matrix[i][j];
-			}
-			else
-			{
-				//this->m_Matrix[i][j].isExist = false;
+				this->m_Matrix[i][j] = i_Other.m_Matrix[i][j];
 			}
 		}
 	}
-
 	for (int i = 0; i < this->m_NumOfVertex; i++)
 	{
 		for (int j = 0; j < this->m_NumOfVertex; j++)
@@ -125,31 +124,29 @@ void AdjugateMatrix::MakeGraphResidual(AdjugateMatrix& Other)
 			}
 		}
 	}
-
 }
-
-void AdjugateMatrix::CopyOnlyFlowEdges(AdjugateMatrix& Other)
+void AdjancencyMatrix::CopyOnlyFlowEdges(AdjancencyMatrix& i_Other)
 {
 	for (int i = 0; i < this->m_NumOfVertex; i++)
 	{
 		for (int j = 0; j < this->m_NumOfVertex; j++)
 		{
-			if (Other.m_Matrix[i][j].currentFlow > 0)
+			if (i_Other.m_Matrix[i][j].currentFlow > 0)
 			{
-				this->m_Matrix[i][j] = Other.m_Matrix[i][j];
+				this->m_Matrix[i][j] = i_Other.m_Matrix[i][j];
 			}
 		}
 	}
 }
 
-void AdjugateMatrix::AddFlow(List Path, int i_ResidualFlow)
+void AdjancencyMatrix::AddFlow(List* i_Path, int i_ResidualFlow)
 {
 	int u, v;
-	Node* currentNode = Path.Head;
-	while (currentNode->next != nullptr)
+	Node* currentNode = i_Path->GetHead();
+	while (currentNode->m_Next != nullptr)
 	{
-		u = currentNode->data;
-		v = currentNode->next->data;
+		u = currentNode->m_Data;
+		v = currentNode->m_Next->m_Data;
 		m_Matrix[u][v].currentFlow += i_ResidualFlow;
 		m_Matrix[u][v].ResidualFlow = m_Matrix[u][v].maxFlow - m_Matrix[u][v].currentFlow;
 
@@ -159,33 +156,47 @@ void AdjugateMatrix::AddFlow(List Path, int i_ResidualFlow)
 		//m_Matrix[v][u].isExist = true;
 
 
-		currentNode = currentNode->next;
+		currentNode = currentNode->m_Next;
 	}
 }
 
-
-List AdjugateMatrix::GetAdjList(int i_u)
+int AdjancencyMatrix::MaxFlow(int S)
 {
-	List AdjList;
+	int maxFlow = 0;
+	List* adjList = GetAdjList(S);
+	Node* currNode = adjList->GetHead();
+	while (currNode)
+	{
+		maxFlow += m_Matrix[S][currNode->m_Data].currentFlow;
+		currNode = currNode->m_Next;
+	}
+	return maxFlow;
+	delete adjList;
+}
+
+
+List* AdjancencyMatrix::GetAdjList(int i_U)
+{
+	List* AdjList = new List();
 	for (int i = 0; i < m_NumOfVertex; i++)
 	{
-		if (m_Matrix[i_u][i].isExist)
+		if (m_Matrix[i_U][i].isExist)
 		{
-			AdjList.InsertToTail(i);
+			AdjList->InsertToTail(i);
 		}
 	}
 
 	return AdjList;
 }
 
-List AdjugateMatrix::GetAdjListByResidual(int i_u)
+List* AdjancencyMatrix::GetAdjListByResidual(int i_U)
 {
-	List AdjList;
+	List* AdjList = new List();
 	for (int i = 0; i < m_NumOfVertex; i++)
 	{
-		if (m_Matrix[i_u][i].isExist && m_Matrix[i_u][i].ResidualFlow != 0 && m_Matrix[i_u][i].maxFlow !=0)
+		if (m_Matrix[i_U][i].isExist && m_Matrix[i_U][i].ResidualFlow != 0 && m_Matrix[i_U][i].maxFlow !=0)
 		{
-			AdjList.InsertToTail(i);
+			AdjList->InsertToTail(i);
 		}
 	}
 

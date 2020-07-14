@@ -1,64 +1,90 @@
 #include "BFS.h"
 
-BFS::BFS(int numOfVertexs)
+BFS::BFS(int i_NumOfVertices)
 {
-	this->d = new int(numOfVertexs);
-	this->p = new int(numOfVertexs);
-	arrSize = numOfVertexs;
+	this->m_Degree = new int(i_NumOfVertices);
+	this->m_Parent = new int(i_NumOfVertices);
+	this->m_Size = i_NumOfVertices;
 }
 
-void BFS::createBFS(AdjugateMatrix& G, int s)
+
+void BFS::createBFSTree(AdjancencyMatrix& i_Graph, int i_S)
 {
-	initialize();
-	Queue Q(arrSize*2);
-	Q.EnQueue(s);
-	d[s] = 0;
-	int u = 0;
+	int u, currVertex;
+	Queue Q(m_Size * 2);
+	initialize(Q, i_S, u);
 
 	while (!Q.isEmpty())
 	{
 		u = Q.DeQueue();
-		List Adj = G.GetAdjListByResidual(u);
-		Node* currNode = Adj.Head;
-		int currVertex;
-
+		List* adjList = i_Graph.GetAdjListByResidual(u);
+		Node* currNode = adjList->GetHead();
 		while (currNode)
 		{
-			currVertex=currNode->data;
-			if (d[currVertex] == INFINITY)
+			currVertex=currNode->m_Data;
+			if (m_Degree[currVertex] == Infinity)
 			{
-				d[currVertex] = d[u] + 1;
-				p[currVertex] = u;
+				m_Degree[currVertex] = m_Degree[u] + 1;
+				m_Parent[currVertex] = u;
 				Q.EnQueue(currVertex);
 			}
-			currNode = currNode->next;
+			currNode = currNode->m_Next;
 		}
+		delete adjList;
 	}
 }
 
-void BFS::initialize()
+void BFS::initialize(Queue& io_Q, int& io_S, int& io_U)
 {
-	for (int i = 0; i < arrSize; i++)
+	for (int i = 0; i < m_Size; i++)
 	{
-		d[i] = INFINITY;
-		p[i] = INFINITY;
+		m_Degree[i] = Infinity;
+		m_Parent[i] = Infinity;
 	}
-
+	io_Q.EnQueue(io_S);
+	m_Degree[io_S] = 0;
+	io_U = 0;
 }
 
 
-List BFS::findPath(int s, int t)
+List* BFS::FindImprovePath(int i_T)
 {
-	List path;
-	int currV = t;
-	if (p[t] != INFINITY)
+	List* path = new List();
+	int currV = i_T;
+	if (m_Parent[i_T] != Infinity)
 	{
-		path.InsertToHead(t);
-		while (p[currV] != INFINITY)
+		path->InsertToHead(i_T);
+		while (m_Parent[currV] != Infinity)
 		{
-			path.InsertToHead(p[currV]);
-			currV = p[currV];
+			path->InsertToHead(m_Parent[currV]);
+			currV = m_Parent[currV];
 		}
 	}
 	return path;
+}
+
+List* BFS::MinCutGroupS(int i_S)
+{
+	List* minCutGroupS = new List();
+	for (int i = 0; i < m_Size; i++)
+	{
+		if (m_Degree[i] != Infinity)
+		{
+			minCutGroupS->InsertToTail(i + 1);
+		}
+	}
+	return minCutGroupS;
+}
+
+List* BFS::MinCutGroupT(int i_T)
+{
+	List* minCutGroupT = new List();
+	for (int i = 0; i < m_Size; i++)
+	{
+		if (m_Degree[i] == Infinity)
+		{
+			minCutGroupT->InsertToTail(i + 1);
+		}
+	}
+	return minCutGroupT;
 }

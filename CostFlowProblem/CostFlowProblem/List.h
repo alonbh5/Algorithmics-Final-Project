@@ -7,17 +7,20 @@
 
 class List
 {
-public:
-	Node* Head;
-	Node* Tail;
+private:
+	Node* m_Head;
+	Node* m_Tail;
 
 public:
 	List();
+	~List();
 	bool IsEmpty();
 	void MakeEmpty();
 	void InsertToTail(int data);
 	void InsertToHead(int data);
-
+	Node* GetHead();
+	Node* GetTail();
+	void PrintList();
 };
 
 

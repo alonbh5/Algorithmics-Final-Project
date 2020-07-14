@@ -1,24 +1,26 @@
-#pragma once
+#ifndef _BFS_H_
+#define _BFS_H_
+#pragma warning (disable:4996)
 
 #include "Queue.h"
-#include "AdjugateMatrix.h"
+#include "AdjancencyMatrix.h"
 #include "List.h"
-#define INFINITY -1
-
 
 class BFS
 {
 private:
-	int* d;
-	int* p;
-	int arrSize;
-
-
-	void initialize();
+	static const int Infinity = -1;
+	int* m_Degree;
+	int* m_Parent;
+	int m_Size;
+	void initialize(Queue& io_Q, int& io_S, int& io_U);
 
 public:
-	BFS(int numOfvertexs);
-	void createBFS(AdjugateMatrix& G, int s);
-	List findPath(int s, int t);
+	BFS(int i_NumOfVertices);
+	void createBFSTree(AdjancencyMatrix& i_Graph, int i_S);
+	List* FindImprovePath(int i_T);
+	List* MinCutGroupS(int i_S);
+	List* MinCutGroupT(int i_T);
 };
 
+#endif // !_BFS_H_

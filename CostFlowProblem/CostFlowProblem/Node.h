@@ -6,12 +6,13 @@
 class Node
 {
 public:
-	int data;
-	Node* next;
+	int m_Data;
+	Node* m_Next;
 
-	Node();
+public:
+	Node(int i_Item);
+	Node(Node* i_Ptr, int i_Item);
 	~Node();
-	Node(Node* ptr, int item);
 	void InsertAfter(Node* newnode);
 	Node* DeleteAfter();
 };

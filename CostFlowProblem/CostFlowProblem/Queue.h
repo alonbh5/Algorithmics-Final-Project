@@ -4,34 +4,27 @@
 #include <iostream>
 #include <stdlib.h>
 using namespace std;
-
 #pragma warning (disable: 4996)
-
 
 class Queue
 {
-
 private:
 	int m_Head;
 	int m_Tail;
-	int m_Data[100] ; //change to num of vertex
+	int* m_Data; 
 	int m_MaxSize;
 
+private: 
 	int AddOne(int x);
 
 public:
-
-	//ctor
-	Queue(int MaxSize);
+	Queue(int i_MaxSize);
 	~Queue();
-
 	void MakeEmpty();
 	bool isEmpty();
 	int Front();
-	void EnQueue(int item);
+	void EnQueue(int i_Item);
 	int DeQueue();
-
-
 };
 
 #endif // !_QUEUE_H
