@@ -20,10 +20,11 @@ public:
 	AdjancencyMatrix(AdjancencyMatrix& i_Other);
 	AdjancencyMatrix(AdjancencyMatrix&& i_Other);
 	~AdjancencyMatrix();
-	void MakeEmptyGraph();
-	bool IsAdjacent(int i_U, int i_V);
+
+
 	List* GetAdjList(int i_U);
 	List* GetAdjListByResidual(int i_U);
+	void MakeEmptyGraph();
 	void AddEdge(int i_U, int i_V, int i_Weight);
 	void RemoveEdge(int i_U, int i_V);
 	void InitFlow();
@@ -32,6 +33,7 @@ public:
 	void CopyOnlyFlowEdges(AdjancencyMatrix& i_Other);
 	void AddFlow(List* i_Path, int i_ResidualFlow);
 	int MaxFlow(int S);
+	bool IsAdjacent(int i_U, int i_V);
 };
 
 #endif // !_AdjancencyMatrix_H_

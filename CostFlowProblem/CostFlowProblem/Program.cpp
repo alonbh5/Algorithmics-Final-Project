@@ -72,7 +72,6 @@ void maximumFlowProblemByBFS(AdjancencyMatrix& Graph, int n, int m, int s, int t
 void printMaxFlowProblemResultBFS(BFS& myBFS, AdjancencyMatrix& GraphResult, AdjancencyMatrix& GraphResidual, int S, int T, int numOfIterations)
 {
 	int maxFlow;
-	//GraphResult.PrintEdges();
 	myBFS.createBFSTree(GraphResidual, S);
 	List* minCutS = myBFS.MinCutGroupS(S);
 	List* minCutT = myBFS.MinCutGroupT(T);
@@ -93,15 +92,15 @@ int findMinResidual(List* i_Path, AdjancencyMatrix& i_Graph)
 
 	min = 10000000; // CHANGEIT
 
-	while (currentNode->m_Next)
+	while (currentNode->GetNext())
 	{
-		u = currentNode->m_Data;
-		v = currentNode->m_Next->m_Data;
+		u = currentNode->GetData();
+		v = currentNode->GetNext()->GetData();
 		if (i_Graph.m_Matrix[u][v].ResidualFlow < min)
 		{
 			min = i_Graph.m_Matrix[u][v].ResidualFlow;
 		}
-		currentNode = currentNode->m_Next;
+		currentNode = currentNode->GetNext();
 	}
 	return min;
 }

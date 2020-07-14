@@ -152,10 +152,10 @@ void AdjancencyMatrix::AddFlow(List* i_Path, int i_ResidualFlow)
 {
 	int u, v;
 	Node* currentNode = i_Path->GetHead();
-	while (currentNode->m_Next != nullptr)
+	while (currentNode->GetNext() != nullptr)
 	{
-		u = currentNode->m_Data;
-		v = currentNode->m_Next->m_Data;
+		u = currentNode->GetData();
+		v = currentNode->GetNext()->GetData();
 		m_Matrix[u][v].currentFlow += i_ResidualFlow;
 		m_Matrix[u][v].ResidualFlow = m_Matrix[u][v].maxFlow - m_Matrix[u][v].currentFlow;
 
@@ -165,7 +165,7 @@ void AdjancencyMatrix::AddFlow(List* i_Path, int i_ResidualFlow)
 		//m_Matrix[v][u].isExist = true;
 
 
-		currentNode = currentNode->m_Next;
+		currentNode = currentNode->GetNext();
 	}
 }
 
@@ -176,8 +176,8 @@ int AdjancencyMatrix::MaxFlow(int S)
 	Node* currNode = adjList->GetHead();
 	while (currNode)
 	{
-		maxFlow += m_Matrix[S][currNode->m_Data].currentFlow;
-		currNode = currNode->m_Next;
+		maxFlow += m_Matrix[S][currNode->GetData()].currentFlow;
+		currNode = currNode->GetNext();
 	}
 	return maxFlow;
 	delete adjList;

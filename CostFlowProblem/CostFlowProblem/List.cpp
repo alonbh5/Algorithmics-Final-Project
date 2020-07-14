@@ -12,9 +12,9 @@ List::~List()
 	{
 		Node* currNode = m_Head;
 		Node* nextNode = nullptr;
-		while (currNode->m_Next)
+		while (currNode->GetNext())
 		{
-			nextNode = currNode->m_Next;
+			nextNode = currNode->GetNext();
 			delete currNode;
 			currNode = nextNode;
 		}
@@ -46,7 +46,7 @@ void List::InsertToTail(int data)
 	}
 	else
 	{
-		m_Tail->m_Next = newNode;
+		m_Tail->SetNext(newNode);
 	}
 	m_Tail = newNode;
 }
@@ -61,7 +61,7 @@ void List::InsertToHead(int data)
 	}
 	else
 	{
-		newNode->m_Next = m_Head;
+		newNode->SetNext(m_Head);
 		m_Head = newNode;
 	}
 }
@@ -76,21 +76,7 @@ Node* List::GetTail()
 	return m_Tail;
 }
 
-void List::PrintList()
-{
-	Node* currNode = m_Head;
-	while (currNode)
-	{
-		std::cout << " " << currNode->m_Data;
-		currNode = currNode->m_Next;
-	}
-	std::cout << ".";
-}
-
-
-
-//add function
-
+//add 
 ostream& operator<<(ostream& os, const List& obj)
 {
 	
@@ -98,7 +84,7 @@ ostream& operator<<(ostream& os, const List& obj)
 	while(currNode)
 	{
 		os << *currNode << " ";
-		currNode = currNode->m_Next;
+		currNode = currNode->GetNext();
 	}
 		return os;
 }

@@ -18,6 +18,21 @@ Node::~Node()
 	m_Next = nullptr;
 }
 
+int Node::GetData()
+{
+	return m_Data;
+}
+
+Node* Node::GetNext()
+{
+	return m_Next;
+}
+
+void Node::SetNext(Node* i_Ptr)
+{
+	m_Next = i_Ptr;
+}
+
 void Node::InsertAfter(Node* newnode)
 {
 	newnode->m_Next = m_Next;
