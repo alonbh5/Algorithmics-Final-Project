@@ -90,7 +90,7 @@ int HeapMax::DeleteMax()
 	m_HeapSize--;
 	m_Data[0] = m_Data[m_HeapSize];
 	FixHeap(0);
-	return (max.key);
+	return (max.data);
 }
 
 //Add a new leaf for item, and swap upwards until item is in its correct position.
