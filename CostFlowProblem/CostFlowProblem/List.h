@@ -5,6 +5,7 @@
 #include <iostream>
 #include "Node.h"
 
+using namespace std;
 class List
 {
 private:
@@ -21,6 +22,8 @@ public:
 	Node* GetHead();
 	Node* GetTail();
 	void PrintList();
+	friend ostream& operator<<(ostream& os, const List& obj);
+
 };
 
 

@@ -2,7 +2,7 @@
 #define _NODE_H
 #pragma warning (disable:4996)
 #include <iostream>
-
+using namespace std;
 class Node
 {
 public:
@@ -15,6 +15,8 @@ public:
 	~Node();
 	void InsertAfter(Node* newnode);
 	Node* DeleteAfter();
+	friend ostream& operator<<(ostream& os, const Node& obj);
+
 };
 
 #endif // !_NODE_H

@@ -33,3 +33,9 @@ Node* Node::DeleteAfter()
 	}
 	return(temp);
 }
+
+ostream& operator<<(ostream& os, const Node& obj)
+{
+	os << obj.m_Data;
+	return os;
+}

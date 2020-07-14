@@ -3,9 +3,9 @@
 #include <fstream>
 using namespace std;
 
-int FindMinResidual(List* i_Path, AdjancencyMatrix& i_Graph);
-void MaximumFlowProblemByBFS(AdjancencyMatrix& i_Graph, int n, int m, int s, int t);
 AdjancencyMatrix* createGraphFromFile(int& n, int& m, int& s, int& t, string file_name);
+int findMinResidual(List* i_Path, AdjancencyMatrix& i_Graph);
+void maximumFlowProblemByBFS(AdjancencyMatrix& i_Graph, int n, int m, int s, int t);
 void printMaxFlowProblemResultBFS(BFS& myBFS, AdjancencyMatrix& GraphResult, AdjancencyMatrix& GraphResidual, int S, int T, int numOfIterations);
 
 int main()
@@ -13,10 +13,9 @@ int main()
 	int n, m, s, t;
 	string file_name = "graph.txt";
 	AdjancencyMatrix* Graph = createGraphFromFile(n, m, s, t, file_name);
-	MaximumFlowProblemByBFS((*Graph), n,m,s-1,t-1); /// change to pointer graph
+	maximumFlowProblemByBFS((*Graph), n,m,s-1,t-1); /// change to pointer graph
 	delete Graph;
 	return 0;
-
 }
 
 AdjancencyMatrix* createGraphFromFile(int& n, int& m, int& s, int& t, string file_name)
@@ -40,7 +39,7 @@ AdjancencyMatrix* createGraphFromFile(int& n, int& m, int& s, int& t, string fil
 
 
 //----------------------------------------------------------------//
-void MaximumFlowProblemByBFS(AdjancencyMatrix& Graph, int n, int m, int s, int t)
+void maximumFlowProblemByBFS(AdjancencyMatrix& Graph, int n, int m, int s, int t)
 {
 	BFS myBFS(n);
 	AdjancencyMatrix GraphResidual(n);
@@ -58,7 +57,7 @@ void MaximumFlowProblemByBFS(AdjancencyMatrix& Graph, int n, int m, int s, int t
 		if (!improvePath->IsEmpty())
 		{
 			numOfIterations++;
-			residualOfPath = FindMinResidual(improvePath, GraphResidual);
+			residualOfPath = findMinResidual(improvePath, GraphResidual);
 			GraphResidual.AddFlow(improvePath, residualOfPath);
 		}
 	} while (!improvePath->IsEmpty());
@@ -72,25 +71,19 @@ void MaximumFlowProblemByBFS(AdjancencyMatrix& Graph, int n, int m, int s, int t
 void printMaxFlowProblemResultBFS(BFS& myBFS, AdjancencyMatrix& GraphResult, AdjancencyMatrix& GraphResidual, int S, int T, int numOfIterations)
 {
 	//GraphResult.PrintEdges();
-
-	//----------------------------//
 	myBFS.createBFSTree(GraphResidual, S);
 	List* minCutS = myBFS.MinCutGroupS(S);
 	List* minCutT = myBFS.MinCutGroupT(T);
 	int maxFlow = GraphResult.MaxFlow(S);
 	cout << "BFS Methods" << endl;
 	cout << "Max Flow = " << maxFlow << endl;
-	cout << "Min Cut: S= "; // CHANGE TO OPERATOR <<
-	minCutS->PrintList();	// CHANGE TO OPERATOR <<
-	cout << "Min Cut: T= ";// CHANGE TO OPERATOR <<
-	minCutT->PrintList();	// CHANGE TO OPERATOR <<
-	cout << endl;
+	cout << "Min Cut: S= " << *minCutS << ". " << "MinCutT: T= " << *minCutT << endl;
 	cout << "Number of iterations = " << numOfIterations << endl;
-	//----------------------------//
 	delete minCutS;
 	delete minCutT;
 }
-int FindMinResidual(List* i_Path, AdjancencyMatrix& i_Graph)
+
+int findMinResidual(List* i_Path, AdjancencyMatrix& i_Graph)
 {
 	Node* currentNode = i_Path->GetHead();	
 	int min;
