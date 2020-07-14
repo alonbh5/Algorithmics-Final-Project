@@ -26,6 +26,12 @@ AdjancencyMatrix::AdjancencyMatrix(AdjancencyMatrix& i_Other)
 	}
 }
 
+AdjancencyMatrix::AdjancencyMatrix(AdjancencyMatrix&& i_Other)
+{
+	this->m_Matrix = i_Other.m_Matrix;
+	this->m_NumOfVertex = i_Other.m_NumOfVertex;
+}
+
 AdjancencyMatrix::~AdjancencyMatrix()
 {
 	for (int i = 0; i < m_NumOfVertex; i++)

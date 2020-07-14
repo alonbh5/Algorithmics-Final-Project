@@ -63,7 +63,7 @@ List* BFS::FindImprovePath(int i_T)
 	return path;
 }
 
-List* BFS::MinCutGroupS(int i_S)
+List* BFS::MinCutGroupS(int i_S) //change for check
 {
 	List* minCutGroupS = new List();
 	for (int i = 0; i < m_Size; i++)

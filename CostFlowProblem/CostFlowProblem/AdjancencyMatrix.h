@@ -18,6 +18,7 @@ public: // make it private
 public:
 	AdjancencyMatrix(int i_NumOfVertex);
 	AdjancencyMatrix(AdjancencyMatrix& i_Other);
+	AdjancencyMatrix(AdjancencyMatrix&& i_Other);
 	~AdjancencyMatrix();
 	void MakeEmptyGraph();
 	bool IsAdjacent(int i_U, int i_V);
