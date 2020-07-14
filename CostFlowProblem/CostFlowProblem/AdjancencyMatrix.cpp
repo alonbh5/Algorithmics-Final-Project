@@ -34,11 +34,14 @@ AdjancencyMatrix::AdjancencyMatrix(AdjancencyMatrix&& i_Other)
 
 AdjancencyMatrix::~AdjancencyMatrix()
 {
-	for (int i = 0; i < m_NumOfVertex; i++)
+	if (m_Matrix != nullptr)
 	{
-		delete[] this->m_Matrix[i];
+		for (int i = 0; i < m_NumOfVertex; i++)
+		{
+			delete[] this->m_Matrix[i];
+		}
+		delete[] m_Matrix;
 	}
-	delete[] m_Matrix;
 }
 
 void AdjancencyMatrix::MakeEmptyGraph()
