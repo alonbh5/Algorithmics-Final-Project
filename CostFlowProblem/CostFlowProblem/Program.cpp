@@ -57,7 +57,7 @@ AdjancencyMatrix* createGraphFromFile(int& n, int& m, int& s, int& t, string fil
 	{
 		in_file >> vertexV >> vertexU >> weightEdge;
 		
-		if (vertexU > n || vertexU < 0 || vertexV > n || vertexV < 0 || weightEdge < 0 || vertexU == vertexV || Graph->m_Matrix[vertexV - 1][vertexU - 1].isExist)
+		if (vertexU > n || vertexU < 0 || vertexV > n || vertexV < 0 || weightEdge < 0 || vertexU == vertexV || Graph->GetMatrix()[vertexV - 1][vertexU - 1].isExist)
 		{
 			//cases:
 			//	dual edges, negtive  weight, self-loop,undefined vertex
@@ -178,12 +178,12 @@ int findMinResidual(List* i_Path, AdjancencyMatrix& i_Graph)
 		v = currentNode->GetNext()->GetData();
 		if (firstIteration)
 		{
-			min = i_Graph.m_Matrix[u][v].ResidualFlow;
+			min = i_Graph.GetMatrix()[u][v].residualFlow;
 			firstIteration = false;
 		}
-		else if(i_Graph.m_Matrix[u][v].ResidualFlow < min)
+		else if(i_Graph.GetMatrix()[u][v].residualFlow < min)
 		{
-			min = i_Graph.m_Matrix[u][v].ResidualFlow;
+			min = i_Graph.GetMatrix()[u][v].residualFlow;
 		}
 		currentNode = currentNode->GetNext();
 	}

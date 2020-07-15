@@ -1,6 +1,6 @@
 #include "AdjancencyMatrix.h"
 
-AdjancencyMatrix::AdjancencyMatrix(int i_NumOfVertex)
+AdjancencyMatrix::AdjancencyMatrix(const int i_NumOfVertex)
 {
 	m_NumOfVertex = i_NumOfVertex;
 	m_Matrix = new EdgeInfo*[i_NumOfVertex];
@@ -8,7 +8,6 @@ AdjancencyMatrix::AdjancencyMatrix(int i_NumOfVertex)
 	{
 		m_Matrix[i] = new EdgeInfo[i_NumOfVertex];
 	}
-
 	MakeEmptyGraph();
 }
 
@@ -45,6 +44,16 @@ AdjancencyMatrix::~AdjancencyMatrix()
 	}
 }
 
+EdgeInfo** AdjancencyMatrix::GetMatrix() const
+{
+	return m_Matrix;
+}
+
+int AdjancencyMatrix::GetNumOfVertex() const
+{
+	return m_NumOfVertex;
+}
+
 void AdjancencyMatrix::MakeEmptyGraph()
 {
 	for (int i = 0; i < m_NumOfVertex; i++)
@@ -52,30 +61,30 @@ void AdjancencyMatrix::MakeEmptyGraph()
 		for (int j = 0; j < m_NumOfVertex; j++)
 		{
 			this->m_Matrix[i][j].currentFlow = 0;
-			this->m_Matrix[i][j].ResidualFlow = 0;
+			this->m_Matrix[i][j].residualFlow = 0;
 			this->m_Matrix[i][j].maxFlow = 0;
 			this->m_Matrix[i][j].isExist = false;
 		}
 	}
 }
 
-bool AdjancencyMatrix::IsAdjacent(int i_U, int i_V)
+bool AdjancencyMatrix::IsAdjacent(const int i_U, const int i_V) const
 {
 	return (m_Matrix[i_U][i_V].isExist);
 }
 
-void AdjancencyMatrix::AddEdge(int i_U, int i_V, int i_Weight)
+void AdjancencyMatrix::AddEdge(const int i_U, const int i_V, const int i_Weight)
 {
 	if (!m_Matrix[i_U][i_V].isExist)
 	{
 		m_Matrix[i_U][i_V].isExist = true;
 		m_Matrix[i_U][i_V].currentFlow = 0;
 		m_Matrix[i_U][i_V].maxFlow = i_Weight;
-		m_Matrix[i_U][i_V].ResidualFlow = i_Weight;
+		m_Matrix[i_U][i_V].residualFlow = i_Weight;
 	}
 }
 
-void AdjancencyMatrix::RemoveEdge(int i_U, int i_V)
+void AdjancencyMatrix::RemoveEdge(const int i_U, const int i_V)
 {
 	m_Matrix[i_U][i_V].isExist = false;
 }
@@ -92,22 +101,8 @@ void AdjancencyMatrix::InitFlow()
 	}
 }
 
-void AdjancencyMatrix::PrintEdges()
-{
-	for (int i = 0; i < this->m_NumOfVertex; i++)
-	{
-		for (int j = 0; j < this->m_NumOfVertex; j++)
-		{
-			if (this->m_Matrix[i][j].isExist)
-			{
-				std::cout << "edge " << i+1 << " " << j+1 << " cur flow " << m_Matrix[i][j].currentFlow << " max flow " << m_Matrix[i][j].maxFlow << " res " << m_Matrix[i][j].ResidualFlow<<std::endl;
-			}
-		}
-		
-	}
-}
 
-void AdjancencyMatrix::MakeGraphResidual(AdjancencyMatrix& i_Other)
+void AdjancencyMatrix::MakeGraphResidual(const AdjancencyMatrix& i_Other)
 {
 	this->m_NumOfVertex = i_Other.m_NumOfVertex;	
 	for (int i = 0; i < this->m_NumOfVertex; i++)
@@ -130,26 +125,13 @@ void AdjancencyMatrix::MakeGraphResidual(AdjancencyMatrix& i_Other)
 				this->m_Matrix[j][i].isExist = true;				
 				this->m_Matrix[j][i].currentFlow = this->m_Matrix[i][j].maxFlow * -1;
 				this->m_Matrix[j][i].maxFlow = 0;
-				this->m_Matrix[j][i].ResidualFlow = this->m_Matrix[j][i].maxFlow - this->m_Matrix[j][i].currentFlow;
-			}
-		}
-	}
-}
-void AdjancencyMatrix::CopyOnlyFlowEdges(AdjancencyMatrix& i_Other)
-{
-	for (int i = 0; i < this->m_NumOfVertex; i++)
-	{
-		for (int j = 0; j < this->m_NumOfVertex; j++)
-		{
-			if (i_Other.m_Matrix[i][j].currentFlow > 0)
-			{
-				this->m_Matrix[i][j] = i_Other.m_Matrix[i][j];
+				this->m_Matrix[j][i].residualFlow = this->m_Matrix[j][i].maxFlow - this->m_Matrix[j][i].currentFlow;
 			}
 		}
 	}
 }
 
-void AdjancencyMatrix::AddFlow(List* i_Path, int i_ResidualFlow)
+void AdjancencyMatrix::AddFlow(const List* i_Path, const int i_ResidualFlow)
 {
 	int u, v;
 	Node* currentNode = i_Path->GetHead();
@@ -158,11 +140,11 @@ void AdjancencyMatrix::AddFlow(List* i_Path, int i_ResidualFlow)
 		u = currentNode->GetData();
 		v = currentNode->GetNext()->GetData();
 		m_Matrix[u][v].currentFlow += i_ResidualFlow;
-		m_Matrix[u][v].ResidualFlow = m_Matrix[u][v].maxFlow - m_Matrix[u][v].currentFlow;
+		m_Matrix[u][v].residualFlow = m_Matrix[u][v].maxFlow - m_Matrix[u][v].currentFlow;
 
 		//anti makbila
 		m_Matrix[v][u].currentFlow = m_Matrix[u][v].currentFlow * -1;
-		m_Matrix[v][u].ResidualFlow = m_Matrix[v][u].maxFlow - m_Matrix[v][u].currentFlow;
+		m_Matrix[v][u].residualFlow = m_Matrix[v][u].maxFlow - m_Matrix[v][u].currentFlow;
 		m_Matrix[v][u].isExist = true;
 
 
@@ -170,7 +152,7 @@ void AdjancencyMatrix::AddFlow(List* i_Path, int i_ResidualFlow)
 	}
 }
 
-int AdjancencyMatrix::MaxFlow(const int S)
+int AdjancencyMatrix::MaxFlow(const int S) const
 {
 	int maxFlow = 0;
 	List* adjList = GetAdjList(S);
@@ -185,7 +167,7 @@ int AdjancencyMatrix::MaxFlow(const int S)
 }
 
 
-List* AdjancencyMatrix::GetAdjList(int i_U)
+List* AdjancencyMatrix::GetAdjList(int i_U) const
 {
 	List* AdjList = new List();
 	for (int i = 0; i < m_NumOfVertex; i++)
@@ -199,12 +181,12 @@ List* AdjancencyMatrix::GetAdjList(int i_U)
 	return AdjList;
 }
 
-List* AdjancencyMatrix::GetAdjListByResidual(int i_U)
+List* AdjancencyMatrix::GetAdjListByResidual(int i_U) const
 {
 	List* AdjList = new List();
 	for (int i = 0; i < m_NumOfVertex; i++)
 	{
-		if (m_Matrix[i_U][i].isExist && m_Matrix[i_U][i].ResidualFlow != 0)
+		if (m_Matrix[i_U][i].isExist && m_Matrix[i_U][i].residualFlow != 0)
 		{
 			if(m_Matrix[i_U][i].maxFlow != 0 || m_Matrix[i][i_U].currentFlow != 0) // lo anti makbila 
 				AdjList->InsertToTail(i);

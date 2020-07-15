@@ -12,7 +12,6 @@ Node::Node(Node* i_Ptr, const int i_Item)
 	m_Next = i_Ptr;
 }
 
-
 Node::~Node()
 {
 	m_Next = nullptr;

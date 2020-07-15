@@ -64,19 +64,19 @@ void Dijkstra::relax(int i_U, int i_V, int i_S, AdjancencyMatrix& Graph, HeapMax
 
 	if (m_Degree[i_V] == Infinity && i_U == i_S)
 	{
-		m_Degree[i_V] = Graph.m_Matrix[i_U][i_V].ResidualFlow;
+		m_Degree[i_V] = Graph.GetMatrix()[i_U][i_V].residualFlow;
 		m_Parent[i_V] = i_U;
 		Q.IncreaseKey(loctionInHeap, m_Degree[i_V]);
 	}
 	else if (m_Degree[i_V] == Infinity && i_U != i_S)
 	{
-		if (m_Degree[i_U] < Graph.m_Matrix[i_U][i_V].ResidualFlow)
+		if (m_Degree[i_U] < Graph.GetMatrix()[i_U][i_V].residualFlow)
 		{
 			val = m_Degree[i_U];
 		}
 		else
 		{
-			val = Graph.m_Matrix[i_U][i_V].ResidualFlow;
+			val = Graph.GetMatrix()[i_U][i_V].residualFlow;
 		}
 		m_Degree[i_V] = val;
 		m_Parent[i_V] = i_U;
@@ -84,13 +84,13 @@ void Dijkstra::relax(int i_U, int i_V, int i_S, AdjancencyMatrix& Graph, HeapMax
 	}
 	else
 	{
-		if (m_Degree[i_U] < Graph.m_Matrix[i_U][i_V].ResidualFlow)
+		if (m_Degree[i_U] < Graph.GetMatrix()[i_U][i_V].residualFlow)
 		{
 			val = m_Degree[i_U];
 		}
 		else
 		{
-			val = Graph.m_Matrix[i_U][i_V].ResidualFlow;
+			val = Graph.GetMatrix()[i_U][i_V].residualFlow;
 		}
 
 		if (m_Degree[i_V] < val && i_V != i_S)
