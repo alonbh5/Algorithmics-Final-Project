@@ -19,8 +19,8 @@ public:
 	Queue();
 	~Queue();
 	void MakeEmpty();
-	bool IsEmpty();
-	int Front();
+	bool IsEmpty() const ;
+	int Front() const;
 	void EnQueue(const int i_Item);
 	int DeQueue(); 
 

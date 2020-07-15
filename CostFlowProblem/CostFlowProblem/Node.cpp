@@ -49,8 +49,8 @@ Node* Node::DeleteAfter()
 	return(temp);
 }
 
-ostream& operator<<(ostream& os, const Node& obj)
+ostream& operator<<(ostream& i_os, const Node& i_obj)
 {
-	os << obj.m_Data;
-	return os;
+	i_os << i_obj.m_Data;
+	return i_os;
 }

@@ -24,7 +24,7 @@ void HeapMax::makeEmpty(const int i_MaxSize)
 	m_Allocated = true;
 }
 
-bool HeapMax::IsEmpty()
+bool HeapMax::IsEmpty() const
 {
 	return (this->m_HeapSize == 0);
 }
@@ -115,7 +115,7 @@ void HeapMax::Insert(const int i_Data, const int i_Key)
 //Build small heaps starting from leaves, and fix heaps while going towards the root.
 
 
-void HeapMax::Build(int* i_DataArr, const int i_ArrSize)
+void HeapMax::Build(const int* i_DataArr, const int i_ArrSize)
 {	
 	createArrPairs(i_DataArr, i_ArrSize);
 	m_HeapSize = m_MaxSize = i_ArrSize;		             
@@ -124,7 +124,7 @@ void HeapMax::Build(int* i_DataArr, const int i_ArrSize)
 		FixHeap(i);
 }
 
-void HeapMax::createArrPairs(int* i_DataArr, const int i_ArrSize)
+void HeapMax::createArrPairs(const int* i_DataArr, const int i_ArrSize)
 {
 	
 	for (int i = 0; i < i_ArrSize; i++)

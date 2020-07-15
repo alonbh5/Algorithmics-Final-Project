@@ -18,7 +18,7 @@ public:
 	void SetNext(Node* i_Ptr);
 	void InsertAfter(Node* newnode);
 	Node* DeleteAfter();
-	friend ostream& operator<<(ostream& os, const Node& obj);
+	friend ostream& operator<<(ostream& i_os, const Node& i_obj);
 };
 
 #endif // !_NODE_H

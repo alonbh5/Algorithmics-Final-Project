@@ -29,15 +29,16 @@ public:
 	HeapMax(const int i_MaxSize);           //Turn arr[] into heap
 	HeapMax() = default;
 	~HeapMax();
-	bool IsEmpty();
+	bool IsEmpty() const;
 	void makeEmpty(const int i_MaxSize); //Allocate memory 
 	int Max();
 	int DeleteMax();
 	void Insert(const int i_Data, const int i_Key);
-	void Build(int* i_DataArr, const int i_ArrSize);
+	void Build(const int* i_DataArr, const int i_ArrSize);
 	void IncreaseKey(const int i_Place, const int i_NewKey);
 	int findPlaceOfKey(const int i_Key) const;
-	void createArrPairs(int* i_DataArr, const int i_ArrSize);
+private:
+	void createArrPairs(const int* i_DataArr, const int i_ArrSize);
 };
 
 #endif // !_HEAPMAX_H

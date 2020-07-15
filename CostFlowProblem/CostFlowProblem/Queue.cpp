@@ -30,12 +30,12 @@ void Queue::MakeEmpty()
 
 }
 
-bool Queue::IsEmpty()
+bool Queue::IsEmpty() const
 {
 	return (m_Tail == m_Head);
 }
 
-int Queue::Front()
+int Queue::Front() const
 {
 	if (IsEmpty())
 	{
