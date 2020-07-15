@@ -14,7 +14,7 @@ public:
 	Node(Node* i_Ptr, const int i_Item);
 	~Node();
 	int GetData() const;
-	Node* GetNext() ;
+	Node* GetNext();
 	void SetNext(Node* i_Ptr);
 	void InsertAfter(Node* newnode);
 	Node* DeleteAfter();

@@ -1,6 +1,5 @@
 #ifndef _DIJKSTRA_H
 #define _DIJKSTRA_H
-#pragma warning (disable:4996)
 
 #include "HeapMax.h"
 #include "AdjancencyMatrix.h"

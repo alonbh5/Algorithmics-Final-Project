@@ -1,43 +1,35 @@
 #ifndef _HEAPMAX_H
 #define _HEAPMAX_H
 
-#pragma warning (disable:4996)
+//#pragma warning (disable:4996)
 #include <iostream>
-#include <utility>
 using namespace std;
-
-struct PairOfData
-{
-	int data; //vertex
-	int key; //weight
-};
 
 class HeapMax
 {
 private:
 	pair <int, int>* m_Data;
-	int m_MaxSize;                      //Max size of heap
-	int m_HeapSize;                     //Current size of heap
-	bool m_Allocated;                    //1 if heap allocated mamory
-
-	static int Left(const int i_NodeIdx);
-	static int Right(const int i_NodeIdx);
-	static int Parent(const int i_NodeIdx);
-	void FixHeap(const int i_NodeIdx);
+	int m_MaxSize;
+	int m_HeapSize;
+	bool m_Allocated;
 
 public:
-	HeapMax(const int i_MaxSize);           //Turn arr[] into heap
-	HeapMax() = default;
+	HeapMax(const int i_MaxSize);
 	~HeapMax();
 	bool IsEmpty() const;
-	void makeEmpty(const int i_MaxSize); //Allocate memory 
-	int Max();
+	void makeEmpty(const int i_MaxSize);
+	int Max() const;
 	int DeleteMax();
 	void Insert(const int i_Data, const int i_Key);
 	void Build(const int* i_DataArr, const int i_ArrSize);
 	void IncreaseKey(const int i_Place, const int i_NewKey);
 	int findPlaceOfKey(const int i_Key) const;
+
 private:
+	static int left(const int i_NodeIdx);
+	static int right(const int i_NodeIdx);
+	static int parent(const int i_NodeIdx);
+	void fixHeap(const int i_NodeIdx);
 	void createArrPairs(const int* i_DataArr, const int i_ArrSize);
 };
 

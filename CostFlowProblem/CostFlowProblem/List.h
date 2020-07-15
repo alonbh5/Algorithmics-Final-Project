@@ -4,8 +4,8 @@
 
 #include <iostream>
 #include "Node.h"
-
 using namespace std;
+
 class List
 {
 private:
@@ -14,7 +14,6 @@ private:
 
 public:
 	List();
-	List(const List& i_Other) = delete; // NEED???
 	~List();
 	bool IsEmpty() const;
 	void MakeEmpty();

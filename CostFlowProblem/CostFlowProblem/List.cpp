@@ -1,4 +1,3 @@
-
 #include "List.h"
 
 List::List()
@@ -8,7 +7,6 @@ List::List()
 
 List::~List()
 {
-	// in book 
 	if (!this->IsEmpty())
 	{
 		Node* currNode = m_Head;
@@ -77,7 +75,6 @@ Node* List::GetTail() const
 	return m_Tail;
 }
 
-//add 
 ostream& operator<<(ostream& os, const List& obj) 
 {
 	Node* currNode = obj.m_Head;

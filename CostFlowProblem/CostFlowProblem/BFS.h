@@ -1,6 +1,5 @@
 #ifndef _BFS_H_
 #define _BFS_H_
-#pragma warning (disable:4996)
 
 #include "Queue.h"
 #include "AdjancencyMatrix.h"
@@ -9,7 +8,7 @@
 class BFS
 {
 private:
-	static const int Infinity = -1;
+	const int Infinity = -1;
 	int* m_Degree;
 	int* m_Parent;
 	int m_Size;
@@ -17,7 +16,6 @@ private:
 
 public:
 	BFS(const int i_NumOfVertices);
-	//BFS(BFS& Other); // NEED DELETE???
 	~BFS();
 	void createBFSTree(AdjancencyMatrix& i_Graph, const int i_S);
 	List* FindImprovePath(const int i_T);
