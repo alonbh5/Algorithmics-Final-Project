@@ -2,8 +2,9 @@
 #include "BFS.h"
 #include "Dijkstra.h"
 #include <fstream>
+#include <stdlib.h>
 using namespace std;
-
+#include <utility>
 AdjancencyMatrix* createGraphFromFile(int& n, int& m, int& s, int& t, string file_name);
 void maximumFlowProblemByBFS(AdjancencyMatrix& i_Graph, int n, int m, int s, int t);
 void maximumFlowProblemByDijkstra(AdjancencyMatrix& Graph, int n, int m, int s, int t);
@@ -15,40 +16,77 @@ void getResultParametersByBFS(BFS& i_MyBFS, AdjancencyMatrix& io_GraphResidual, 
 void getResultParametersByDijkstra(Dijkstra& i_MyDijkstra, AdjancencyMatrix& io_GraphResidual, List*& o_MinCutS, List*& o_MinCutT, int& o_MaxFlow, int i_S, int i_T);
 void printResultOfMaxFlowProblem(List* i_GroupS, List* i_GroupT, int i_MaxFlow, int i_NumOfIterations, string i_MethodName);
 
-int main()
+void main(int argc, char* argv[])
 {
+//	pair <int, char> PAIR1;
 	int n, m, s, t;
-	string file_name = "graph.txt";
+	string file_name = argv[1];
 	AdjancencyMatrix* Graph = createGraphFromFile(n, m, s, t, file_name);	
 	maximumFlowProblemByBFS((*Graph), n, m, s - 1, t - 1);
 	maximumFlowProblemByDijkstra((*Graph), n, m, s - 1, t - 1);
 	delete Graph;
-	return 0;
-
-	//Check all the 5 inputs
-	//Check input with lot of spaces
+	//5-t (maxflow == 0) אין במקרה זה רשת זרימה
+	// , קיבלוים חיוביים? תקלות קלט:  משקלים שליליים,   
+	//האם חייב להיות לפחות מסלול אחד? האם זה תקין שאין בכלל מסלול ואז אין רשת זרימה?
+	//מסמך ללא פרמטרים מיותרים בסוף או משהו כזה.
+	//All the kodkodim are less the n
 	//Recheck The function - Const, Good Naming, Code Reuse and Efficiency of the methods.
 	//Arrange the Program class - mayble to open AUXILARY Class with all the other methods (or put them as static function in the classes)
-	//Get the name of the file in Argument
+	//EXIT CASESS
+	//CHENGE QUEUE TO SINGLY LINKED
+	//קלט יכול להיות לא תקין
+	//incresekey לדאוג לשלוח מיקום ת'ין
+
+	//Check input with lot of spaces
+	//Check all the 5 inputs write inside the PDF
+	//Efficiency in PDF
 }
 
 AdjancencyMatrix* createGraphFromFile(int& n, int& m, int& s, int& t, string file_name)
 {
+	int numOfEdges = 0;
+	bool error = false;
 	ifstream in_file(file_name, ios::in);
 	int vertexV, vertexU, weightEdge;
 	if (!in_file)
-		exit(-1);
+	{
+		cout << "Cannot open the file: " << file_name << endl;
+		exit(1);
+	}
 
 	in_file >> n >> m >> s >> t;
 	AdjancencyMatrix* Graph = new AdjancencyMatrix(n);
 
-	for (int i = 0; i < m; i++)
+	for (int i = 0; i < m || in_file.eof(); i++)
 	{
 		in_file >> vertexV >> vertexU >> weightEdge;
+		
+		if (vertexU > n || vertexU < 0 || vertexV > n || vertexV < 0 || weightEdge < 0 || vertexU == vertexV || Graph->m_Matrix[vertexV - 1][vertexU - 1].isExist)
+		{
+			//cases:
+			//	dual edges, negtive  weight, self-loop,undefined vertex
+			error = true;
+			break;
+		}		
+		
 		Graph->AddEdge(vertexV - 1, vertexU - 1, weightEdge);
+		numOfEdges++;
 	}
 
 	in_file.close();
+
+	if (numOfEdges != m)
+	{			
+		error = true;
+	}
+
+	if (error)
+	{
+		cout << "Invalid Input!" << endl;
+		exit(2);
+	}
+
+	
 	return Graph;
 }
 

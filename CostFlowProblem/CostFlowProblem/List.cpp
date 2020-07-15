@@ -80,7 +80,6 @@ Node* List::GetTail() const
 //add 
 ostream& operator<<(ostream& os, const List& obj) 
 {
-	
 	Node* currNode = obj.m_Head;
 	while(currNode)
 	{

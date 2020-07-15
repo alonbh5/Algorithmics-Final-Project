@@ -32,7 +32,7 @@ public:
 	void MakeGraphResidual(AdjancencyMatrix& i_Other);
 	void CopyOnlyFlowEdges(AdjancencyMatrix& i_Other);
 	void AddFlow(List* i_Path, int i_ResidualFlow);
-	int MaxFlow(int S);
+	int MaxFlow(const int S);
 	bool IsAdjacent(int i_U, int i_V);
 };
 

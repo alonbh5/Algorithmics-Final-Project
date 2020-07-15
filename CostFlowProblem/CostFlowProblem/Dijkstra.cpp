@@ -32,23 +32,41 @@ void Dijkstra::createDijkstraTree(AdjancencyMatrix& i_Graph, int i_S)
 		while (currNode)
 		{
 			vertexV = currNode->GetData();
-			relax(vertexU, vertexV, i_S, i_Graph, Q);
+			if (m_Degree[vertexU] != Infinity)
+			{
+				relax(vertexU, vertexV, i_S, i_Graph, Q);
+			}
 			currNode = currNode->GetNext();
+
 		}
 		delete AdjList;
 	}
+	//cout << "==============" << endl;
+	//for (int i = 0; i < m_Size; i++)
+	//{
+	//	cout << i << ": " << m_Degree[i] << " ";
+	//}
+	//cout << endl << endl;
+	//for (int i = 0; i < m_Size; i++)
+	//{
+	//	cout << i << ": " << m_Parent[i] << " ";
+	//}
+	//cout << endl << endl;
+
 
 }
 
 void Dijkstra::relax(int i_U, int i_V, int i_S, AdjancencyMatrix& Graph, HeapMax& Q)
 {
 	int val;
+	int loctionInHeap = Q.findPlaceOfKey(i_V);
+
 
 	if (m_Degree[i_V] == Infinity && i_U == i_S)
 	{
 		m_Degree[i_V] = Graph.m_Matrix[i_U][i_V].ResidualFlow;
 		m_Parent[i_V] = i_U;
-		Q.IncreaseKey(i_V, m_Degree[i_V]);
+		Q.IncreaseKey(loctionInHeap, m_Degree[i_V]);
 	}
 	else if (m_Degree[i_V] == Infinity && i_U != i_S)
 	{
@@ -62,7 +80,7 @@ void Dijkstra::relax(int i_U, int i_V, int i_S, AdjancencyMatrix& Graph, HeapMax
 		}
 		m_Degree[i_V] = val;
 		m_Parent[i_V] = i_U;
-		Q.IncreaseKey(i_V, m_Degree[i_V]);
+		Q.IncreaseKey(loctionInHeap, m_Degree[i_V]);
 	}
 	else
 	{
@@ -75,11 +93,11 @@ void Dijkstra::relax(int i_U, int i_V, int i_S, AdjancencyMatrix& Graph, HeapMax
 			val = Graph.m_Matrix[i_U][i_V].ResidualFlow;
 		}
 
-		if (m_Degree[i_V] < val)
+		if (m_Degree[i_V] < val && i_V != i_S)
 		{
 			m_Degree[i_V] = val;
 			m_Parent[i_V] = i_U;
-			Q.IncreaseKey(i_V, m_Degree[i_V]);
+			Q.IncreaseKey(loctionInHeap, m_Degree[i_V]);
 		}
 	}
 }
@@ -114,6 +132,7 @@ List* Dijkstra::FindImprovePath(const int i_T)
 			path->InsertToHead(m_Parent[currV]);
 			currV = m_Parent[currV];
 		}
+		//cout << *path << endl;
 	}
 	return path;
 }

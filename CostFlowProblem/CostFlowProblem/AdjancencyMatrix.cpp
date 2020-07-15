@@ -163,14 +163,14 @@ void AdjancencyMatrix::AddFlow(List* i_Path, int i_ResidualFlow)
 		//anti makbila
 		m_Matrix[v][u].currentFlow = m_Matrix[u][v].currentFlow * -1;
 		m_Matrix[v][u].ResidualFlow = m_Matrix[v][u].maxFlow - m_Matrix[v][u].currentFlow;
-		//m_Matrix[v][u].isExist = true;
+		m_Matrix[v][u].isExist = true;
 
 
 		currentNode = currentNode->GetNext();
 	}
 }
 
-int AdjancencyMatrix::MaxFlow(int S)
+int AdjancencyMatrix::MaxFlow(const int S)
 {
 	int maxFlow = 0;
 	List* adjList = GetAdjList(S);
@@ -180,8 +180,8 @@ int AdjancencyMatrix::MaxFlow(int S)
 		maxFlow += m_Matrix[S][currNode->GetData()].currentFlow;
 		currNode = currNode->GetNext();
 	}
-	return maxFlow;
 	delete adjList;
+	return maxFlow;
 }
 
 
@@ -204,9 +204,11 @@ List* AdjancencyMatrix::GetAdjListByResidual(int i_U)
 	List* AdjList = new List();
 	for (int i = 0; i < m_NumOfVertex; i++)
 	{
-		if (m_Matrix[i_U][i].isExist && m_Matrix[i_U][i].ResidualFlow != 0 && m_Matrix[i_U][i].maxFlow !=0)
+		if (m_Matrix[i_U][i].isExist && m_Matrix[i_U][i].ResidualFlow != 0)
 		{
-			AdjList->InsertToTail(i);
+			if(m_Matrix[i_U][i].maxFlow != 0 || m_Matrix[i][i_U].currentFlow != 0) // lo anti makbila 
+				AdjList->InsertToTail(i);
+
 		}
 	}
 

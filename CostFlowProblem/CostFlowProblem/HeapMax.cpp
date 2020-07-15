@@ -140,9 +140,9 @@ void HeapMax::createArrPairs(int* i_DataArr, const int i_ArrSize)
 
 void HeapMax::IncreaseKey(const int i_Place, const int i_NewKey)
 {
-	int key = i_Place;
+	
 	PairOfData temp;
-	int i = findPlaceOfKey(key);
+	int i = i_Place;
 	
 	m_Data[i].key = i_NewKey;
 	temp = m_Data[i];
