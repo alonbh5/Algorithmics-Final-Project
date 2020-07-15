@@ -135,7 +135,7 @@ void HeapMax::IncreaseKey(const int i_Place, const int i_NewKey)
 	m_Data[i] = temp;
 }
 
-int HeapMax::findPlaceOfKey(const int i_Data) const
+int HeapMax::FindPlaceOfKey(const int i_Data) const
 {
 	for (int i = 0; i < m_HeapSize; i++)
 	{

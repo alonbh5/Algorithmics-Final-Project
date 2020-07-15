@@ -15,7 +15,7 @@ Dijkstra::~Dijkstra()
 	delete[] m_Parent;
 }
 
-void Dijkstra::createDijkstraTree(AdjancencyMatrix& i_Graph, int i_S)
+void Dijkstra::RunDijkstra(AdjancencyMatrix& i_Graph, int i_S)
 {
 	initialize(i_S);
 	int vertexU, vertexV;
@@ -59,7 +59,7 @@ void Dijkstra::createDijkstraTree(AdjancencyMatrix& i_Graph, int i_S)
 void Dijkstra::relax(int i_U, int i_V, int i_S, AdjancencyMatrix& Graph, HeapMax& Q)
 {
 	int val;
-	int loctionInHeap = Q.findPlaceOfKey(i_V);
+	int loctionInHeap = Q.FindPlaceOfKey(i_V);
 
 
 	if (m_Degree[i_V] == Infinity && i_U == i_S)

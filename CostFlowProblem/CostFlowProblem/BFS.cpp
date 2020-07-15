@@ -20,7 +20,7 @@ BFS::~BFS()
 }
 
 
-void BFS::createBFSTree(AdjancencyMatrix& i_Graph, int i_S)
+void BFS::RunBFS(AdjancencyMatrix& i_Graph, int i_S)
 {
 	int u, currVertex;
 	Queue Q;

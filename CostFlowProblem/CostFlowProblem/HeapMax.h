@@ -23,7 +23,7 @@ public:
 	void Insert(const int i_Data, const int i_Key);
 	void Build(const int* i_DataArr, const int i_ArrSize);
 	void IncreaseKey(const int i_Place, const int i_NewKey);
-	int findPlaceOfKey(const int i_Key) const;
+	int FindPlaceOfKey(const int i_Key) const;
 
 private:
 	static int left(const int i_NodeIdx);
