@@ -4,25 +4,21 @@
 //C'tor: allocate memory for the heap and make the heap empty.
 HeapMax::HeapMax(int i_MaxSize)
 {
-	//makeEmpty(i_MaxSize);
-	m_MaxSize = i_MaxSize;
-	m_Data = new PairOfData[i_MaxSize];
-	m_HeapSize = 0;
-	m_Allocated = true;
+	makeEmpty(i_MaxSize);
 }
 
 //D'tor: delete memory only if allocates by heap
 HeapMax::~HeapMax()
-{
-	//if (m_Allocated)
-	//	delete (this->m_Data);
+{///CHECKKKKKK!!!!!
+	if (m_Allocated)
+		delete (this->m_Data);
 	m_Data = nullptr;
 }
 
 
 void HeapMax::makeEmpty(const int i_MaxSize)
 {
-	m_Data = new PairOfData[i_MaxSize];
+	m_Data = new pair<int, int>[i_MaxSize];
 	m_MaxSize = i_MaxSize;
 	m_HeapSize = 0;
 	m_Allocated = true;
@@ -35,7 +31,7 @@ bool HeapMax::IsEmpty()
 
 int HeapMax::Max()
 {
-	return this->m_Data[0].data;
+	return this->m_Data[0].second;
 }
 
 //Private Member functions of Heap class
@@ -62,11 +58,11 @@ void HeapMax::FixHeap(const int i_NodeIdx)    //Fixes the heap that has node as 
 	int right = Right(i_NodeIdx);
 
 	//Find min among node, left and right.	
-	if ((left < m_HeapSize) && (m_Data[left].key > m_Data[i_NodeIdx].key))
+	if ((left < m_HeapSize) && (m_Data[left].first > m_Data[i_NodeIdx].first))
 		max = left;
 	else
 		max = i_NodeIdx;
-	if ((right < m_HeapSize) && (m_Data[right].key > m_Data[max].key))
+	if ((right < m_HeapSize) && (m_Data[right].first > m_Data[max].first))
 		max = right;
 
 	//Seap values if neccessary, and continue fixing the heap towards the leaves.
@@ -86,16 +82,17 @@ int HeapMax::DeleteMax()
 		exit(1);
 	}
 
-	PairOfData max = m_Data[0];
+	pair <int,int> max = m_Data[0];
 	m_HeapSize--;
 	m_Data[0] = m_Data[m_HeapSize];
 	FixHeap(0);
-	return (max.data);
+	return (max.second);
 }
 
 //Add a new leaf for item, and swap upwards until item is in its correct position.
-void HeapMax::Insert(const PairOfData i_Item)
+void HeapMax::Insert(const int i_Data, const int i_Key)
 {
+	pair <int, int> newPair(i_Key, i_Data);
 	if (m_HeapSize == m_MaxSize)
 	{
 		cout << "Error: HEAP FULL\n";
@@ -105,12 +102,12 @@ void HeapMax::Insert(const PairOfData i_Item)
 	int i = m_HeapSize;
 	m_HeapSize++;
 
-	while ((i > 0) && (m_Data[Parent(i)].key < i_Item.key))
+	while ((i > 0) && (m_Data[Parent(i)].first < newPair.first))
 	{
 		m_Data[i] = m_Data[Parent(i)];
 		i = Parent(i);
 	}
-	m_Data[i] = i_Item;
+	m_Data[i] = newPair;
 }
 
 //C'tor: convert an array which contains n numbers into a heap.
@@ -132,23 +129,22 @@ void HeapMax::createArrPairs(int* i_DataArr, const int i_ArrSize)
 	
 	for (int i = 0; i < i_ArrSize; i++)
 	{
-		m_Data[i].data = i; //vertex
-		m_Data[i].key = i_DataArr[i]; //witgh
+		m_Data[i].second = i; //vertex
+		m_Data[i].first = i_DataArr[i]; //witgh
 	}
 	
 }
 
 void HeapMax::IncreaseKey(const int i_Place, const int i_NewKey)
-{
-	
-	PairOfData temp;
+{	
+	pair<int,int> temp;
 	int i = i_Place;
 	
-	m_Data[i].key = i_NewKey;
+	m_Data[i].first = i_NewKey;
 	temp = m_Data[i];
 	std::swap(m_Data[i], m_Data[m_HeapSize]);	
 
-	while ((i > 0) && (m_Data[Parent(i)].key < temp.key))
+	while ((i > 0) && (m_Data[Parent(i)].first < temp.first))
 	{
 		m_Data[i] = m_Data[Parent(i)];
 		i = Parent(i);
@@ -161,7 +157,7 @@ int HeapMax::findPlaceOfKey(const int i_Data) const
 {
 	for (int i = 0; i < m_HeapSize; i++)
 	{
-		if (m_Data[i].data == i_Data)
+		if (m_Data[i].second == i_Data)
 		{
 			return i;
 		}

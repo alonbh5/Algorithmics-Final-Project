@@ -1,32 +1,38 @@
 #include "Queue.h"
 
-
-Queue::Queue(int i_MaxSize)
-{
-	this->m_Data = new int[i_MaxSize];
-	m_MaxSize = i_MaxSize;
-	this->m_Head = 1;
-	this->m_Tail = 0;
-	for (int i = 0; i < i_MaxSize; i++)
-	{
-		this->m_Data[i] = 0;
-	}
+Queue::Queue()
+{	
+	m_Head = new Node(DUMMY);
+	m_Tail = m_Head;
 }
 
 Queue::~Queue()
 {
-	delete[] (this->m_Data);
+	MakeEmpty();
+	delete m_Head;
 }
 
 void Queue::MakeEmpty()
 {
-	m_Head = 1;
-	m_Tail = 0;
+	if (!IsEmpty())
+	{
+		Node* curNode = m_Head->GetNext();
+		Node* temp = nullptr;
+
+		while (curNode != nullptr)
+		{
+			temp = curNode->GetNext();
+			delete curNode;
+			curNode = temp;
+		}
+		m_Tail = m_Head;
+	}
+
 }
 
 bool Queue::IsEmpty()
 {
-	return (AddOne(m_Tail) == m_Head);
+	return (m_Tail == m_Head);
 }
 
 int Queue::Front()
@@ -36,35 +42,32 @@ int Queue::Front()
 		cout << "Error: Queue IS EMPTY :(" << endl;
 		exit(1);
 	}
-	return (m_Data[m_Head]);
+	return (m_Head->GetNext()->GetData());
 }
 
 void Queue::EnQueue(const int i_Utem)
 {
-	if (AddOne(AddOne(m_Tail)) == m_Head)
-	{
-		cout << "Queue IS Full" << endl;
-		exit(2);
-	}
-	m_Tail = AddOne(m_Tail);
-	m_Data[m_Tail] = i_Utem;
+	Node* newnode = new Node(i_Utem);
+	m_Tail->InsertAfter(newnode);
+	m_Tail = newnode;
 }
 
 int Queue::DeQueue()
 {
-	int item;
-
 	if (IsEmpty())
 	{
-		cout << "Error: Queue IS EMPTY" << endl;
-		exit(3);
+		cout << "Error: Queue IS EMPTY :(" << endl;
+		exit(1);
 	}
-	item = m_Data[m_Head];
-	m_Head = AddOne(m_Head);
+
+	Node* temp = m_Head->DeleteAfter();
+	int item = temp->GetData();
+	if (m_Tail == temp)
+	{
+		m_Tail = m_Head;
+	}
+
+	delete temp;
 	return item;
 }
 
-int Queue::AddOne(const int x)
-{
-	return ((1 + x) % m_MaxSize);
-}

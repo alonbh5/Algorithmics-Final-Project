@@ -4,7 +4,6 @@
 #include <fstream>
 #include <stdlib.h>
 using namespace std;
-#include <utility>
 AdjancencyMatrix* createGraphFromFile(int& n, int& m, int& s, int& t, string file_name);
 void maximumFlowProblemByBFS(AdjancencyMatrix& i_Graph, int n, int m, int s, int t);
 void maximumFlowProblemByDijkstra(AdjancencyMatrix& Graph, int n, int m, int s, int t);
@@ -18,26 +17,23 @@ void printResultOfMaxFlowProblem(List* i_GroupS, List* i_GroupT, int i_MaxFlow, 
 
 void main(int argc, char* argv[])
 {
-//	pair <int, char> PAIR1;
 	int n, m, s, t;
 	string file_name = argv[1];
 	AdjancencyMatrix* Graph = createGraphFromFile(n, m, s, t, file_name);	
 	maximumFlowProblemByBFS((*Graph), n, m, s - 1, t - 1);
 	maximumFlowProblemByDijkstra((*Graph), n, m, s - 1, t - 1);
 	delete Graph;
+	////====================== שאלות לפורום   =========================== //
+	//האם לאפשר משקלים שלילים? 
 	//5-t (maxflow == 0) אין במקרה זה רשת זרימה
-	// , קיבלוים חיוביים? תקלות קלט:  משקלים שליליים,   
 	//האם חייב להיות לפחות מסלול אחד? האם זה תקין שאין בכלל מסלול ואז אין רשת זרימה?
-	//מסמך ללא פרמטרים מיותרים בסוף או משהו כזה.
-	//All the kodkodim are less the n
+	//מסמך ללא פרמטרים מיותרים בסוף או משהו כזה.	
+	// ================================================================== //
+
 	//Recheck The function - Const, Good Naming, Code Reuse and Efficiency of the methods.
 	//Arrange the Program class - mayble to open AUXILARY Class with all the other methods (or put them as static function in the classes)
-	//EXIT CASESS
-	//CHENGE QUEUE TO SINGLY LINKED
-	//קלט יכול להיות לא תקין
-	//incresekey לדאוג לשלוח מיקום ת'ין
 
-	//Check input with lot of spaces
+		
 	//Check all the 5 inputs write inside the PDF
 	//Efficiency in PDF
 }
@@ -68,7 +64,6 @@ AdjancencyMatrix* createGraphFromFile(int& n, int& m, int& s, int& t, string fil
 			error = true;
 			break;
 		}		
-		
 		Graph->AddEdge(vertexV - 1, vertexU - 1, weightEdge);
 		numOfEdges++;
 	}
@@ -134,7 +129,6 @@ void maximumFlowProblemByDijkstra(AdjancencyMatrix& Graph, int n, int m, int s, 
 		myDijkstra.createDijkstraTree(GraphResidual, s);
 		improvePath = myDijkstra.FindImprovePath(t);
 		addResidualFlowToEdgesOfTheImprovePath(improvePath, GraphResidual, numOfIterations);
-
 	} while (improvePath);
 
 	getResultParametersByDijkstra(myDijkstra, GraphResidual, minCutS, minCutT, maxFlow, s, t);
@@ -201,9 +195,16 @@ int findMinResidual(List* i_Path, AdjancencyMatrix& i_Graph)
 void printResultOfMaxFlowProblem(List* i_GroupS, List* i_GroupT, int i_MaxFlow, int i_NumOfIterations, string i_MethodName)
 {
 	cout << i_MethodName << endl;
-	cout << "Max Flow = " << i_MaxFlow << endl;
-	cout << "Min cut: S = " << *i_GroupS << " " << " T = " << *i_GroupT << endl;
-	cout << "Number of iterations = " << i_NumOfIterations << endl;
+	if (i_NumOfIterations == 0)
+	{
+		cout << "No Network Flow" << endl;
+	}
+	else
+	{
+		cout << "Max Flow = " << i_MaxFlow << endl;
+		cout << "Min cut: S = " << *i_GroupS << " " << " T = " << *i_GroupT << endl;
+		cout << "Number of iterations = " << i_NumOfIterations << endl;
+	}
 }
 
 //----------------------------------------------------------------//

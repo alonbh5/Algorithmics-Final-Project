@@ -27,7 +27,7 @@ BFS::~BFS()
 void BFS::createBFSTree(AdjancencyMatrix& i_Graph, int i_S)
 {
 	int u, currVertex;
-	Queue Q(m_Size * 2);
+	Queue Q;
 	initialize(Q, i_S, u);
 
 	while (!Q.IsEmpty())

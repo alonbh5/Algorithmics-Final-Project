@@ -3,6 +3,7 @@
 
 #pragma warning (disable:4996)
 #include <iostream>
+#include <utility>
 using namespace std;
 
 struct PairOfData
@@ -14,7 +15,7 @@ struct PairOfData
 class HeapMax
 {
 private:
-	PairOfData* m_Data;
+	pair <int, int>* m_Data;
 	int m_MaxSize;                      //Max size of heap
 	int m_HeapSize;                     //Current size of heap
 	bool m_Allocated;                    //1 if heap allocated mamory
@@ -32,7 +33,7 @@ public:
 	void makeEmpty(const int i_MaxSize); //Allocate memory 
 	int Max();
 	int DeleteMax();
-	void Insert(const PairOfData i_Item);
+	void Insert(const int i_Data, const int i_Key);
 	void Build(int* i_DataArr, const int i_ArrSize);
 	void IncreaseKey(const int i_Place, const int i_NewKey);
 	int findPlaceOfKey(const int i_Key) const;

@@ -23,7 +23,7 @@ int Node::GetData() const
 	return m_Data;
 }
 
-Node* Node::GetNext() const
+Node* Node::GetNext() 
 {
 	return m_Next;
 }
@@ -46,6 +46,7 @@ Node* Node::DeleteAfter()
 	{
 		return nullptr;
 	}
+	m_Next = temp->m_Next;
 	return(temp);
 }
 
