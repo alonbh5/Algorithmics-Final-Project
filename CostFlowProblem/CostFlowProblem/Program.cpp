@@ -27,8 +27,9 @@ int main()
 
 	//Check all the 5 inputs
 	//Check input with lot of spaces
-	//Recheck The function - Const, Good Naming, Code Reuse and Eff
-	//Arrange the Program class - mayble to open AUXILARY Class with all the other methods.
+	//Recheck The function - Const, Good Naming, Code Reuse and Efficiency of the methods.
+	//Arrange the Program class - mayble to open AUXILARY Class with all the other methods (or put them as static function in the classes)
+	//Get the name of the file in Argument
 }
 
 AdjancencyMatrix* createGraphFromFile(int& n, int& m, int& s, int& t, string file_name)
