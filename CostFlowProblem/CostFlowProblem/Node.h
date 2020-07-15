@@ -10,11 +10,11 @@ private:
 	Node* m_Next;
 
 public:
-	Node(int i_Item);
-	Node(Node* i_Ptr, int i_Item);
+	Node(const int i_Item);
+	Node(Node* i_Ptr, const int i_Item);
 	~Node();
-	int GetData();
-	Node* GetNext();
+	int GetData() const;
+	Node* GetNext() const;
 	void SetNext(Node* i_Ptr);
 	void InsertAfter(Node* newnode);
 	Node* DeleteAfter();

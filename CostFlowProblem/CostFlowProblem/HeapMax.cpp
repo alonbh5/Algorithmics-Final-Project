@@ -20,7 +20,7 @@ HeapMax::~HeapMax()
 }
 
 
-void HeapMax::makeEmpty(int i_MaxSize)
+void HeapMax::makeEmpty(const int i_MaxSize)
 {
 	m_Data = new PairOfData[i_MaxSize];
 	m_MaxSize = i_MaxSize;
@@ -40,22 +40,22 @@ int HeapMax::Max()
 
 //Private Member functions of Heap class
 
-int HeapMax::Parent(int i_NodeIdx)
+int HeapMax::Parent(const int i_NodeIdx)
 {
 	return (i_NodeIdx - 1) / 2;
 }
 
-int HeapMax::Left(int i_NodeIdx)
+int HeapMax::Left(const int i_NodeIdx)
 {
 	return (2 * i_NodeIdx + 1);
 }
 
-int HeapMax::Right(int i_NodeIdx)
+int HeapMax::Right(const int i_NodeIdx) 
 {
 	return (2 * i_NodeIdx + 2);
 }
 
-void HeapMax::FixHeap(int i_NodeIdx)    //Fixes the heap that has node as root
+void HeapMax::FixHeap(const int i_NodeIdx)    //Fixes the heap that has node as root
 {
 	int max;
 	int left = Left(i_NodeIdx);
@@ -94,7 +94,7 @@ int HeapMax::DeleteMax()
 }
 
 //Add a new leaf for item, and swap upwards until item is in its correct position.
-void HeapMax::Insert(PairOfData i_Item)
+void HeapMax::Insert(const PairOfData i_Item)
 {
 	if (m_HeapSize == m_MaxSize)
 	{
@@ -118,7 +118,7 @@ void HeapMax::Insert(PairOfData i_Item)
 //Build small heaps starting from leaves, and fix heaps while going towards the root.
 
 
-void HeapMax::Build(int* i_DataArr, int i_ArrSize)
+void HeapMax::Build(int* i_DataArr, const int i_ArrSize)
 {	
 	createArrPairs(i_DataArr, i_ArrSize);
 	m_HeapSize = m_MaxSize = i_ArrSize;		             
@@ -127,7 +127,7 @@ void HeapMax::Build(int* i_DataArr, int i_ArrSize)
 		FixHeap(i);
 }
 
-void HeapMax::createArrPairs(int* i_DataArr, int i_ArrSize)
+void HeapMax::createArrPairs(int* i_DataArr, const int i_ArrSize)
 {
 	
 	for (int i = 0; i < i_ArrSize; i++)
@@ -138,7 +138,7 @@ void HeapMax::createArrPairs(int* i_DataArr, int i_ArrSize)
 	
 }
 
-void HeapMax::IncreaseKey(int i_Place, int i_NewKey)
+void HeapMax::IncreaseKey(const int i_Place, const int i_NewKey)
 {
 	int key = i_Place;
 	PairOfData temp;
@@ -157,7 +157,7 @@ void HeapMax::IncreaseKey(int i_Place, int i_NewKey)
 
 }
 
-int HeapMax::findPlaceOfKey(int i_Data)
+int HeapMax::findPlaceOfKey(const int i_Data) const
 {
 	for (int i = 0; i < m_HeapSize; i++)
 	{

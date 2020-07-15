@@ -12,7 +12,7 @@ AdjancencyMatrix::AdjancencyMatrix(int i_NumOfVertex)
 	MakeEmptyGraph();
 }
 
-AdjancencyMatrix::AdjancencyMatrix(AdjancencyMatrix& i_Other)
+AdjancencyMatrix::AdjancencyMatrix(const AdjancencyMatrix& i_Other)
 {
 	this->m_NumOfVertex = i_Other.m_NumOfVertex;
 	this->m_Matrix = new EdgeInfo*[this->m_NumOfVertex];
@@ -30,6 +30,7 @@ AdjancencyMatrix::AdjancencyMatrix(AdjancencyMatrix&& i_Other)
 {
 	this->m_Matrix = i_Other.m_Matrix;
 	this->m_NumOfVertex = i_Other.m_NumOfVertex;
+	i_Other.m_Matrix = nullptr;
 }
 
 AdjancencyMatrix::~AdjancencyMatrix()

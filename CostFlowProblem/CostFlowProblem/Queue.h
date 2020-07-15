@@ -18,12 +18,12 @@ private:
 	int AddOne(int x);
 
 public:
-	Queue(int i_MaxSize);
+	Queue(const int i_MaxSize);
 	~Queue();
 	void MakeEmpty();
-	bool isEmpty();
+	bool IsEmpty();
 	int Front();
-	void EnQueue(int i_Item);
+	void EnQueue(const int i_Item);
 	int DeQueue();
 };
 

@@ -1,12 +1,12 @@
 #include "Node.h"
 
-Node::Node(int i_Item)
+Node::Node(const int i_Item)
 {
 	m_Data = i_Item;
 	m_Next = nullptr;
 }
 
-Node::Node(Node* i_Ptr, int i_Item)
+Node::Node(Node* i_Ptr, const int i_Item)
 {
 	m_Data = i_Item;
 	m_Next = i_Ptr;
@@ -18,12 +18,12 @@ Node::~Node()
 	m_Next = nullptr;
 }
 
-int Node::GetData()
+int Node::GetData() const
 {
 	return m_Data;
 }
 
-Node* Node::GetNext()
+Node* Node::GetNext() const
 {
 	return m_Next;
 }

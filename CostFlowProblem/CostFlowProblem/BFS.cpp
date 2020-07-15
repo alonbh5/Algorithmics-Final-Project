@@ -1,6 +1,6 @@
 #include "BFS.h"
 
-BFS::BFS(int i_NumOfVertices)
+BFS::BFS(const int i_NumOfVertices)
 {
 	this->m_Degree = new int[i_NumOfVertices];
 	this->m_Parent = new int[i_NumOfVertices];
@@ -30,7 +30,7 @@ void BFS::createBFSTree(AdjancencyMatrix& i_Graph, int i_S)
 	Queue Q(m_Size * 2);
 	initialize(Q, i_S, u);
 
-	while (!Q.isEmpty())
+	while (!Q.IsEmpty())
 	{
 		u = Q.DeQueue();
 		List* adjList = i_Graph.GetAdjListByResidual(u);
@@ -50,7 +50,7 @@ void BFS::createBFSTree(AdjancencyMatrix& i_Graph, int i_S)
 	}
 }
 
-void BFS::initialize(Queue& io_Q, int& io_S, int& io_U)
+void BFS::initialize(Queue& io_Q, const int io_S, int& io_U)
 {
 	for (int i = 0; i < m_Size; i++)
 	{
@@ -63,12 +63,14 @@ void BFS::initialize(Queue& io_Q, int& io_S, int& io_U)
 }
 
 
-List* BFS::FindImprovePath(int i_T)
+List* BFS::FindImprovePath(const int i_T)
 {
-	List* path = new List();
+	List* path = nullptr;
 	int currV = i_T;
 	if (m_Parent[i_T] != Infinity)
 	{
+		path = new List();
+
 		path->InsertToHead(i_T);
 		while (m_Parent[currV] != Infinity)
 		{
@@ -79,7 +81,7 @@ List* BFS::FindImprovePath(int i_T)
 	return path;
 }
 
-List* BFS::MinCutGroupS(int i_S) //change for check
+List* BFS::MinCutGroupS(const int i_S) //change for check
 {
 	List* minCutGroupS = new List();
 	for (int i = 0; i < m_Size; i++)
@@ -92,7 +94,7 @@ List* BFS::MinCutGroupS(int i_S) //change for check
 	return minCutGroupS;
 }
 
-List* BFS::MinCutGroupT(int i_T)
+List* BFS::MinCutGroupT(const int i_T)
 {
 	List* minCutGroupT = new List();
 	for (int i = 0; i < m_Size; i++)

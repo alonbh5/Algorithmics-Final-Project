@@ -6,10 +6,6 @@ List::List()
 	MakeEmpty();
 }
 
-List::List(List& Other)
-{
-}
-
 List::~List()
 {
 	// in book 
@@ -37,7 +33,7 @@ void List::MakeEmpty()
 	m_Tail = nullptr;
 }
 
-bool List::IsEmpty()
+bool List::IsEmpty() const
 {
 	return (m_Head == nullptr);
 }
@@ -71,25 +67,28 @@ void List::InsertToHead(int data)
 	}
 }
 
-Node* List::GetHead()
+Node* List::GetHead() const
 {
 	return m_Head;
 }
 
-Node* List::GetTail()
+Node* List::GetTail() const
 {
 	return m_Tail;
 }
 
 //add 
-ostream& operator<<(ostream& os, const List& obj)
+ostream& operator<<(ostream& os, const List& obj) 
 {
 	
 	Node* currNode = obj.m_Head;
 	while(currNode)
 	{
-		os << *currNode << " ";
+		if(currNode->GetNext())
+			os << *currNode << ", ";
+		else
+			os << *currNode << ".";
 		currNode = currNode->GetNext();
 	}
-		return os;
+	return os;
 }

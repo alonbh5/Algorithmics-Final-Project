@@ -17,7 +17,7 @@ public: // make it private
 
 public:
 	AdjancencyMatrix(int i_NumOfVertex);
-	AdjancencyMatrix(AdjancencyMatrix& i_Other);
+	AdjancencyMatrix(const AdjancencyMatrix& i_Other);
 	AdjancencyMatrix(AdjancencyMatrix&& i_Other);
 	~AdjancencyMatrix();
 

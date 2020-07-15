@@ -14,16 +14,15 @@ private:
 
 public:
 	List();
-	List(List& Other);
+	List(const List& i_Other) = delete; // NEED???
 	~List();
-	bool IsEmpty();
+	bool IsEmpty() const;
 	void MakeEmpty();
 	void InsertToTail(int data);
 	void InsertToHead(int data);
-	Node* GetHead();
-	Node* GetTail();
+	Node* GetHead() const;
+	Node* GetTail() const;
 	friend ostream& operator<<(ostream& os, const List& obj);
-
 };
 
 

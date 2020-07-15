@@ -42,18 +42,53 @@ void Dijkstra::createDijkstraTree(AdjancencyMatrix& i_Graph, int i_S)
 
 void Dijkstra::relax(int i_U, int i_V, int i_S, AdjancencyMatrix& Graph, HeapMax& Q)
 {
+	int val;
 
-	if (m_Degree[i_V] < m_Degree[i_U] + Graph.m_Matrix[i_U][i_V].ResidualFlow && i_V != i_S, i_V != m_Parent[i_U]) 		
+	if (m_Degree[i_V] == Infinity && i_U == i_S)
 	{
-		m_Degree[i_V] = m_Degree[i_U] + Graph.m_Matrix[i_U][i_V].ResidualFlow;	;
+		m_Degree[i_V] = Graph.m_Matrix[i_U][i_V].ResidualFlow;
 		m_Parent[i_V] = i_U;
-		Q.IncreaseKey(i_V, m_Degree[i_V]); 
+		Q.IncreaseKey(i_V, m_Degree[i_V]);
+	}
+	else if (m_Degree[i_V] == Infinity && i_U != i_S)
+	{
+		if (m_Degree[i_U] < Graph.m_Matrix[i_U][i_V].ResidualFlow)
+		{
+			val = m_Degree[i_U];
+		}
+		else
+		{
+			val = Graph.m_Matrix[i_U][i_V].ResidualFlow;
+		}
+		m_Degree[i_V] = val;
+		m_Parent[i_V] = i_U;
+		Q.IncreaseKey(i_V, m_Degree[i_V]);
+	}
+	else
+	{
+		if (m_Degree[i_U] < Graph.m_Matrix[i_U][i_V].ResidualFlow)
+		{
+			val = m_Degree[i_U];
+		}
+		else
+		{
+			val = Graph.m_Matrix[i_U][i_V].ResidualFlow;
+		}
+
+		if (m_Degree[i_V] < val)
+		{
+			m_Degree[i_V] = val;
+			m_Parent[i_V] = i_U;
+			Q.IncreaseKey(i_V, m_Degree[i_V]);
+		}
 	}
 }
 
 
 
-void Dijkstra::initialize(int& i_S)
+
+
+void Dijkstra::initialize(const int i_S)
 {
 	for (int i = 0; i < m_Size; i++)
 	{
@@ -66,12 +101,13 @@ void Dijkstra::initialize(int& i_S)
 
 
 
-List* Dijkstra::FindImprovePath(int i_T)
+List* Dijkstra::FindImprovePath(const int i_T) 
 {
-	List* path = new List();
+	List* path = nullptr;
 	int currV = i_T;
 	if (m_Parent[i_T] != Infinity)
 	{
+		path = new List();
 		path->InsertToHead(i_T);
 		while (m_Parent[currV] != Infinity)
 		{
@@ -82,7 +118,7 @@ List* Dijkstra::FindImprovePath(int i_T)
 	return path;
 }
 
-List* Dijkstra::MinCutGroupS(int i_S) //change for check
+List* Dijkstra::MinCutGroupS(const int i_S)  //change for check
 {
 	List* minCutGroupS = new List();
 	for (int i = 0; i < m_Size; i++)
@@ -95,7 +131,7 @@ List* Dijkstra::MinCutGroupS(int i_S) //change for check
 	return minCutGroupS;
 }
 
-List* Dijkstra::MinCutGroupT(int i_T)
+List* Dijkstra::MinCutGroupT(const int i_T)
 {
 	List* minCutGroupT = new List();
 	for (int i = 0; i < m_Size; i++)

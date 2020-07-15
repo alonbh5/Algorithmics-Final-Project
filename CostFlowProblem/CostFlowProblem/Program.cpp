@@ -5,23 +5,30 @@
 using namespace std;
 
 AdjancencyMatrix* createGraphFromFile(int& n, int& m, int& s, int& t, string file_name);
-int findMinResidual(List* i_Path, AdjancencyMatrix& i_Graph);
 void maximumFlowProblemByBFS(AdjancencyMatrix& i_Graph, int n, int m, int s, int t);
-void printMaxFlowProblemResultBFS(BFS& myBFS, AdjancencyMatrix& GraphResult, AdjancencyMatrix& GraphResidual, int S, int T, int numOfIterations);
 void maximumFlowProblemByDijkstra(AdjancencyMatrix& Graph, int n, int m, int s, int t);
-void printMaxFlowProblemResultDijkstra(Dijkstra& myDijkstra, AdjancencyMatrix& GraphResult, AdjancencyMatrix& GraphResidual, int S, int T, int numOfIterations);
 
+//AuxilaryFunction
+int findMinResidual(List* i_Path, AdjancencyMatrix& i_Graph);
+void addResidualFlowToEdgesOfTheImprovePath(List* i_ImprovePath, AdjancencyMatrix& io_GraphResidual, int& io_NumOfIterations);
+void getResultParametersByBFS(BFS& i_MyBFS, AdjancencyMatrix& io_GraphResidual, List*& o_MinCutS, List*& o_MinCutT, int& o_MaxFlow, int i_S, int i_T);
+void getResultParametersByDijkstra(Dijkstra& i_MyDijkstra, AdjancencyMatrix& io_GraphResidual, List*& o_MinCutS, List*& o_MinCutT, int& o_MaxFlow, int i_S, int i_T);
+void printResultOfMaxFlowProblem(List* i_GroupS, List* i_GroupT, int i_MaxFlow, int i_NumOfIterations, string i_MethodName);
 
 int main()
 {
 	int n, m, s, t;
 	string file_name = "graph.txt";
 	AdjancencyMatrix* Graph = createGraphFromFile(n, m, s, t, file_name);	
+	maximumFlowProblemByBFS((*Graph), n, m, s - 1, t - 1);
 	maximumFlowProblemByDijkstra((*Graph), n, m, s - 1, t - 1);
 	delete Graph;
 	return 0;
 
-	//fix problem sometimes in the end of the main or when i print max flow;
+	//Check all the 5 inputs
+	//Check input with lot of spaces
+	//Recheck The function - Const, Good Naming, Code Reuse and Eff
+	//Arrange the Program class - mayble to open AUXILARY Class with all the other methods.
 }
 
 AdjancencyMatrix* createGraphFromFile(int& n, int& m, int& s, int& t, string file_name)
@@ -50,59 +57,98 @@ AdjancencyMatrix* createGraphFromFile(int& n, int& m, int& s, int& t, string fil
 void maximumFlowProblemByBFS(AdjancencyMatrix& Graph, int n, int m, int s, int t)
 {
 	BFS myBFS(n);
-	AdjancencyMatrix GraphResidual(n), GraphResult(n);
+	AdjancencyMatrix GraphResidual(n);
+	List* minCutS, *minCutT, *improvePath = nullptr;
+	int numOfIterations = 0, maxFlow;
 	GraphResidual.MakeGraphResidual(Graph);
-	List* improvePath = nullptr;
-	int residualOfPath, numOfIterations = 0;
 
 	do {
-		if (improvePath != nullptr)
+		if (improvePath)
 			delete improvePath;
 
 		myBFS.createBFSTree(GraphResidual, s);
 		improvePath = myBFS.FindImprovePath(t);
-		if (!improvePath->IsEmpty())
-		{
-			numOfIterations++;
-			residualOfPath = findMinResidual(improvePath, GraphResidual);
-			GraphResidual.AddFlow(improvePath, residualOfPath);
-		}
-	} while (!improvePath->IsEmpty());
+		addResidualFlowToEdgesOfTheImprovePath(improvePath, GraphResidual, numOfIterations);
+		
+	} while (improvePath);
 
-	if (improvePath != nullptr)
-		delete improvePath;
-
-	GraphResult.CopyOnlyFlowEdges(GraphResidual);
-	printMaxFlowProblemResultBFS(myBFS,GraphResult,GraphResidual,s,t,numOfIterations);
+	getResultParametersByBFS(myBFS, GraphResidual, minCutS, minCutT, maxFlow, s, t);
+	printResultOfMaxFlowProblem(minCutS, minCutT, maxFlow, numOfIterations, "BFS Method");
+	if(minCutS)
+		delete minCutS;
+	if(minCutT)
+		delete minCutT;
 }
 
-void printMaxFlowProblemResultBFS(BFS& myBFS, AdjancencyMatrix& GraphResult, AdjancencyMatrix& GraphResidual, int S, int T, int numOfIterations)
+//----------------------------------------------------------------//
+void maximumFlowProblemByDijkstra(AdjancencyMatrix& Graph, int n, int m, int s, int t)
 {
-	myBFS.createBFSTree(GraphResidual, S);
-	List* minCutS = myBFS.MinCutGroupS(S);
-	List* minCutT = myBFS.MinCutGroupT(T);
-	int maxFlow = GraphResult.MaxFlow(S);
-	cout << "BFS Methods" << endl;
-	cout << "Max Flow = " << maxFlow << endl;
-	cout << "Min Cut: S= " << *minCutS << ". " << "MinCutT: T= " << *minCutT << endl;
-	cout << "Number of iterations = " << numOfIterations << endl;
-	delete minCutS;
-	delete minCutT;
+	Dijkstra myDijkstra(n);
+	AdjancencyMatrix GraphResidual(n);
+	GraphResidual.MakeGraphResidual(Graph);
+	List* improvePath = nullptr, *minCutS, *minCutT;
+	int maxFlow, numOfIterations = 0;
+
+	do {
+		if (improvePath)
+			delete improvePath;
+		myDijkstra.createDijkstraTree(GraphResidual, s);
+		improvePath = myDijkstra.FindImprovePath(t);
+		addResidualFlowToEdgesOfTheImprovePath(improvePath, GraphResidual, numOfIterations);
+
+	} while (improvePath);
+
+	getResultParametersByDijkstra(myDijkstra, GraphResidual, minCutS, minCutT, maxFlow, s, t);
+	printResultOfMaxFlowProblem(minCutS, minCutT, maxFlow, numOfIterations, "Greddy Method");
+	if (minCutS)
+		delete minCutS;
+	if (minCutT)
+		delete minCutT;
 }
+
+void getResultParametersByBFS(BFS& i_MyBFS, AdjancencyMatrix& io_GraphResidual, List*& o_MinCutS, List*& o_MinCutT, int& o_MaxFlow, int i_S, int i_T)
+{
+	i_MyBFS.createBFSTree(io_GraphResidual, i_S);
+	o_MaxFlow = io_GraphResidual.MaxFlow(i_S);
+	o_MinCutS = i_MyBFS.MinCutGroupS(i_S);
+	o_MinCutT = i_MyBFS.MinCutGroupT(i_T);
+}
+void getResultParametersByDijkstra(Dijkstra& i_MyDijkstra, AdjancencyMatrix& io_GraphResidual, List*& o_MinCutS, List*& o_MinCutT, int& o_MaxFlow, int i_S, int i_T)
+{
+	i_MyDijkstra.createDijkstraTree(io_GraphResidual, i_S);
+	o_MaxFlow = io_GraphResidual.MaxFlow(i_S);
+	o_MinCutS = i_MyDijkstra.MinCutGroupS(i_S);
+	o_MinCutT = i_MyDijkstra.MinCutGroupT(i_T);
+}
+
+//----------------------------------------------------------------//
+
+void addResidualFlowToEdgesOfTheImprovePath(List* i_ImprovePath, AdjancencyMatrix& io_GraphResidual, int& io_NumOfIterations)
+{
+	if (i_ImprovePath)
+	{
+		io_NumOfIterations++;
+		int residualOfPath = findMinResidual(i_ImprovePath, io_GraphResidual);
+		io_GraphResidual.AddFlow(i_ImprovePath, residualOfPath);
+	}
+}
+//----------------------------------------------------------------//
 
 int findMinResidual(List* i_Path, AdjancencyMatrix& i_Graph)
 {
 	Node* currentNode = i_Path->GetHead();	
-	int min;
-	int u, v;
-
-	min = 10000000; // CHANGEIT
-
+	int min = 0, u, v;
+	bool firstIteration = true;
 	while (currentNode->GetNext())
 	{
 		u = currentNode->GetData();
 		v = currentNode->GetNext()->GetData();
-		if (i_Graph.m_Matrix[u][v].ResidualFlow < min)
+		if (firstIteration)
+		{
+			min = i_Graph.m_Matrix[u][v].ResidualFlow;
+			firstIteration = false;
+		}
+		else if(i_Graph.m_Matrix[u][v].ResidualFlow < min)
 		{
 			min = i_Graph.m_Matrix[u][v].ResidualFlow;
 		}
@@ -112,46 +158,13 @@ int findMinResidual(List* i_Path, AdjancencyMatrix& i_Graph)
 }
 
 //----------------------------------------------------------------//
-void maximumFlowProblemByDijkstra(AdjancencyMatrix& Graph, int n, int m, int s, int t)
+
+void printResultOfMaxFlowProblem(List* i_GroupS, List* i_GroupT, int i_MaxFlow, int i_NumOfIterations, string i_MethodName)
 {
-	Dijkstra myDijkstra(n);
-	AdjancencyMatrix GraphResidual(n), GraphResult(n);
-	GraphResidual.MakeGraphResidual(Graph);
-	List* improvePath = nullptr;
-	int residualOfPath, numOfIterations = 0;
-
-	do {
-		if (improvePath != nullptr)
-			delete improvePath;
-
-		myDijkstra.createDijkstraTree(GraphResidual, s);
-		improvePath = myDijkstra.FindImprovePath(t);
-		if (!improvePath->IsEmpty())
-		{
-			numOfIterations++;
-			residualOfPath = findMinResidual(improvePath, GraphResidual);
-			GraphResidual.AddFlow(improvePath, residualOfPath);
-		}
-	} while (!improvePath->IsEmpty());
-
-	if (improvePath != nullptr)
-		delete improvePath;
-
-	GraphResult.CopyOnlyFlowEdges(GraphResidual);
-	printMaxFlowProblemResultDijkstra(myDijkstra, GraphResult, GraphResidual, s, t, numOfIterations);
+	cout << i_MethodName << endl;
+	cout << "Max Flow = " << i_MaxFlow << endl;
+	cout << "Min cut: S = " << *i_GroupS << " " << " T = " << *i_GroupT << endl;
+	cout << "Number of iterations = " << i_NumOfIterations << endl;
 }
 
-void printMaxFlowProblemResultDijkstra(Dijkstra& myDijkstra, AdjancencyMatrix& GraphResult, AdjancencyMatrix& GraphResidual, int S, int T, int numOfIterations)
-{
-	myDijkstra.createDijkstraTree(GraphResidual, S);
-	List* minCutS = myDijkstra.MinCutGroupS(S);
-	List* minCutT = myDijkstra.MinCutGroupT(T);
-	int maxFlow = GraphResult.MaxFlow(S);
-	cout << "BFS Methods" << endl;
-	cout << "Max Flow = " << maxFlow << endl;
-	cout << "Min Cut: S= " << *minCutS << ". " << "MinCutT: T= " << *minCutT << endl;
-	cout << "Number of iterations = " << numOfIterations << endl;
-	delete minCutS;
-	delete minCutT;
-}
-
+//----------------------------------------------------------------//

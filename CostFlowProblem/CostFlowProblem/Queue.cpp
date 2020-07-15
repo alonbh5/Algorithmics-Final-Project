@@ -24,14 +24,14 @@ void Queue::MakeEmpty()
 	m_Tail = 0;
 }
 
-bool Queue::isEmpty()
+bool Queue::IsEmpty()
 {
 	return (AddOne(m_Tail) == m_Head);
 }
 
 int Queue::Front()
 {
-	if (isEmpty())
+	if (IsEmpty())
 	{
 		cout << "Error: Queue IS EMPTY :(" << endl;
 		exit(1);
@@ -39,7 +39,7 @@ int Queue::Front()
 	return (m_Data[m_Head]);
 }
 
-void Queue::EnQueue(int i_Utem)
+void Queue::EnQueue(const int i_Utem)
 {
 	if (AddOne(AddOne(m_Tail)) == m_Head)
 	{
@@ -54,7 +54,7 @@ int Queue::DeQueue()
 {
 	int item;
 
-	if (isEmpty())
+	if (IsEmpty())
 	{
 		cout << "Error: Queue IS EMPTY" << endl;
 		exit(3);
@@ -64,7 +64,7 @@ int Queue::DeQueue()
 	return item;
 }
 
-int Queue::AddOne(int x)
+int Queue::AddOne(const int x)
 {
 	return ((1 + x) % m_MaxSize);
 }
