@@ -16,19 +16,6 @@ void program::AlgoritmicFinal()
 {		
 	maximumFlowProblemByBFS((*m_Graph), m_NumOfVertex, m_NumOfEdges, m_StartVertex , m_EndVertex);
 	maximumFlowProblemByDijkstra((*m_Graph), m_NumOfVertex, m_NumOfEdges, m_StartVertex, m_EndVertex);	
-	////====================== שאלות לפורום   =========================== //
-	//האם לאפשר משקלים שלילים? 
-	//5-t (maxflow == 0) אין במקרה זה רשת זרימה
-	//האם חייב להיות לפחות מסלול אחד? האם זה תקין שאין בכלל מסלול ואז אין רשת זרימה?
-	//מסמך ללא פרמטרים מיותרים בסוף או משהו כזה.	
-	// ================================================================== //
-
-	//Recheck The function - Const, Good Naming, Code Reuse and Efficiency of the methods.
-	//Arrange the Program class - mayble to open AUXILARY Class with all the other methods (or put them as static function in the classes)
-
-		
-	//Check all the 5 inputs write inside the PDF
-	//Efficiency in PDF
 }
 
 AdjancencyMatrix* program::createGraphFromFile(int& n, int& m, int& s, int& t, string file_name)
@@ -95,7 +82,7 @@ void program::maximumFlowProblemByBFS(AdjancencyMatrix& Graph, int n, int m, int
 		if (improvePath)
 			delete improvePath;
 
-		myBFS.createBFSTree(GraphResidual, s);
+		myBFS.RunBFS(GraphResidual, s);
 		improvePath = myBFS.FindImprovePath(t);
 		addResidualFlowToEdgesOfTheImprovePath(improvePath, GraphResidual, numOfIterations);
 		
@@ -121,7 +108,7 @@ void program::maximumFlowProblemByDijkstra(AdjancencyMatrix& Graph, int n, int m
 	do {
 		if (improvePath)
 			delete improvePath;
-		myDijkstra.createDijkstraTree(GraphResidual, s);
+		myDijkstra.RunDijkstra(GraphResidual, s);
 		improvePath = myDijkstra.FindImprovePath(t);
 		addResidualFlowToEdgesOfTheImprovePath(improvePath, GraphResidual, numOfIterations);
 	} while (improvePath);
@@ -136,14 +123,14 @@ void program::maximumFlowProblemByDijkstra(AdjancencyMatrix& Graph, int n, int m
 
 void program::getResultParametersByBFS(BFS& i_MyBFS, AdjancencyMatrix& io_GraphResidual, List*& o_MinCutS, List*& o_MinCutT, int& o_MaxFlow, int i_S, int i_T)
 {
-	i_MyBFS.createBFSTree(io_GraphResidual, i_S);
+	i_MyBFS.RunBFS(io_GraphResidual, i_S);
 	o_MaxFlow = io_GraphResidual.MaxFlow(i_S);
 	o_MinCutS = i_MyBFS.MinCutGroupS(i_S);
 	o_MinCutT = i_MyBFS.MinCutGroupT(i_T);
 }
 void program::getResultParametersByDijkstra(Dijkstra& i_MyDijkstra, AdjancencyMatrix& io_GraphResidual, List*& o_MinCutS, List*& o_MinCutT, int& o_MaxFlow, int i_S, int i_T)
 {
-	i_MyDijkstra.createDijkstraTree(io_GraphResidual, i_S);
+	i_MyDijkstra.RunDijkstra(io_GraphResidual, i_S);
 	o_MaxFlow = io_GraphResidual.MaxFlow(i_S);
 	o_MinCutS = i_MyDijkstra.MinCutGroupS(i_S);
 	o_MinCutT = i_MyDijkstra.MinCutGroupT(i_T);
