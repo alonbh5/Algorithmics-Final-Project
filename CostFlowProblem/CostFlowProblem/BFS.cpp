@@ -7,10 +7,6 @@ BFS::BFS(const int i_NumOfVertices)
 	this->m_Size = i_NumOfVertices;
 }
 
-//BFS::BFS(BFS& Other)
-//{
-//}
-
 BFS::~BFS()
 {
 	if (m_Degree != nullptr)
@@ -24,7 +20,7 @@ BFS::~BFS()
 }
 
 
-void BFS::createBFSTree(AdjancencyMatrix& i_Graph, int i_S)
+void BFS::RunBFS(AdjancencyMatrix& i_Graph, int i_S)
 {
 	int u, currVertex;
 	Queue Q;
@@ -70,7 +66,6 @@ List* BFS::FindImprovePath(const int i_T)
 	if (m_Parent[i_T] != Infinity)
 	{
 		path = new List();
-
 		path->InsertToHead(i_T);
 		while (m_Parent[currV] != Infinity)
 		{
@@ -81,7 +76,7 @@ List* BFS::FindImprovePath(const int i_T)
 	return path;
 }
 
-List* BFS::MinCutGroupS(const int i_S) //change for check
+List* BFS::MinCutGroupS(const int i_S)
 {
 	List* minCutGroupS = new List();
 	for (int i = 0; i < m_Size; i++)

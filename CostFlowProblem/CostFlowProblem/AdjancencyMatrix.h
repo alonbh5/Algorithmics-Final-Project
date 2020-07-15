@@ -1,8 +1,8 @@
 #ifndef _AdjancencyMatrix_H_
 #define _AdjancencyMatrix_H_
-#pragma warning (disable:4996) 
 
 #include "List.h"
+
 struct EdgeInfo {
 	int currentFlow;
 	int maxFlow;
