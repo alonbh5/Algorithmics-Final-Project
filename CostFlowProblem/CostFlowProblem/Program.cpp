@@ -1,13 +1,21 @@
 #include "Program.h"
 
-void AlgoritmicFinal(int argc, char* argv[])
+program::program(int argc, char* argv[])
 {
-	int n, m, s, t;
 	string file_name = argv[1];
-	AdjancencyMatrix* Graph = createGraphFromFile(n, m, s, t, file_name);	
-	maximumFlowProblemByBFS((*Graph), n, m, s - 1, t - 1);
-	maximumFlowProblemByDijkstra((*Graph), n, m, s - 1, t - 1);
-	delete Graph;
+	m_Graph= createGraphFromFile(m_NumOfVertex, m_NumOfEdges, m_StartVertex, m_EndVertex, file_name);
+}
+
+program::~program()
+{
+	delete m_Graph;
+}
+
+
+void program::AlgoritmicFinal()
+{		
+	maximumFlowProblemByBFS((*m_Graph), m_NumOfVertex, m_NumOfEdges, m_StartVertex , m_EndVertex);
+	maximumFlowProblemByDijkstra((*m_Graph), m_NumOfVertex, m_NumOfEdges, m_StartVertex, m_EndVertex);	
 	////====================== שאלות לפורום   =========================== //
 	//האם לאפשר משקלים שלילים? 
 	//5-t (maxflow == 0) אין במקרה זה רשת זרימה
@@ -23,7 +31,7 @@ void AlgoritmicFinal(int argc, char* argv[])
 	//Efficiency in PDF
 }
 
-AdjancencyMatrix* createGraphFromFile(int& n, int& m, int& s, int& t, string file_name)
+AdjancencyMatrix* program::createGraphFromFile(int& n, int& m, int& s, int& t, string file_name)
 {
 	int numOfEdges = 0;
 	bool error = false;
@@ -66,6 +74,8 @@ AdjancencyMatrix* createGraphFromFile(int& n, int& m, int& s, int& t, string fil
 		exit(2);
 	}
 
+	s--; //First Vertex is 0 and not 1
+	t--;
 	
 	return Graph;
 }
@@ -73,7 +83,7 @@ AdjancencyMatrix* createGraphFromFile(int& n, int& m, int& s, int& t, string fil
 
 
 //----------------------------------------------------------------//
-void maximumFlowProblemByBFS(AdjancencyMatrix& Graph, int n, int m, int s, int t)
+void program::maximumFlowProblemByBFS(AdjancencyMatrix& Graph, int n, int m, int s, int t)
 {
 	BFS myBFS(n);
 	AdjancencyMatrix GraphResidual(n);
@@ -100,7 +110,7 @@ void maximumFlowProblemByBFS(AdjancencyMatrix& Graph, int n, int m, int s, int t
 }
 
 //----------------------------------------------------------------//
-void maximumFlowProblemByDijkstra(AdjancencyMatrix& Graph, int n, int m, int s, int t)
+void program::maximumFlowProblemByDijkstra(AdjancencyMatrix& Graph, int n, int m, int s, int t)
 {
 	Dijkstra myDijkstra(n);
 	AdjancencyMatrix GraphResidual(n);
@@ -124,14 +134,14 @@ void maximumFlowProblemByDijkstra(AdjancencyMatrix& Graph, int n, int m, int s, 
 		delete minCutT;
 }
 
-void getResultParametersByBFS(BFS& i_MyBFS, AdjancencyMatrix& io_GraphResidual, List*& o_MinCutS, List*& o_MinCutT, int& o_MaxFlow, int i_S, int i_T)
+void program::getResultParametersByBFS(BFS& i_MyBFS, AdjancencyMatrix& io_GraphResidual, List*& o_MinCutS, List*& o_MinCutT, int& o_MaxFlow, int i_S, int i_T)
 {
 	i_MyBFS.createBFSTree(io_GraphResidual, i_S);
 	o_MaxFlow = io_GraphResidual.MaxFlow(i_S);
 	o_MinCutS = i_MyBFS.MinCutGroupS(i_S);
 	o_MinCutT = i_MyBFS.MinCutGroupT(i_T);
 }
-void getResultParametersByDijkstra(Dijkstra& i_MyDijkstra, AdjancencyMatrix& io_GraphResidual, List*& o_MinCutS, List*& o_MinCutT, int& o_MaxFlow, int i_S, int i_T)
+void program::getResultParametersByDijkstra(Dijkstra& i_MyDijkstra, AdjancencyMatrix& io_GraphResidual, List*& o_MinCutS, List*& o_MinCutT, int& o_MaxFlow, int i_S, int i_T)
 {
 	i_MyDijkstra.createDijkstraTree(io_GraphResidual, i_S);
 	o_MaxFlow = io_GraphResidual.MaxFlow(i_S);
@@ -141,7 +151,7 @@ void getResultParametersByDijkstra(Dijkstra& i_MyDijkstra, AdjancencyMatrix& io_
 
 //----------------------------------------------------------------//
 
-void addResidualFlowToEdgesOfTheImprovePath(List* i_ImprovePath, AdjancencyMatrix& io_GraphResidual, int& io_NumOfIterations)
+void program::addResidualFlowToEdgesOfTheImprovePath(List* i_ImprovePath, AdjancencyMatrix& io_GraphResidual, int& io_NumOfIterations)
 {
 	if (i_ImprovePath)
 	{
@@ -152,7 +162,7 @@ void addResidualFlowToEdgesOfTheImprovePath(List* i_ImprovePath, AdjancencyMatri
 }
 //----------------------------------------------------------------//
 
-int findMinResidual(List* i_Path, AdjancencyMatrix& i_Graph)
+int program::findMinResidual(List* i_Path, AdjancencyMatrix& i_Graph)
 {
 	Node* currentNode = i_Path->GetHead();	
 	int min = 0, u, v;
@@ -177,7 +187,7 @@ int findMinResidual(List* i_Path, AdjancencyMatrix& i_Graph)
 
 //----------------------------------------------------------------//
 
-void printResultOfMaxFlowProblem(List* i_GroupS, List* i_GroupT, int i_MaxFlow, int i_NumOfIterations, string i_MethodName)
+void program::printResultOfMaxFlowProblem(List* i_GroupS, List* i_GroupT, int i_MaxFlow, int i_NumOfIterations, string i_MethodName)
 {
 	cout << i_MethodName << endl;
 	if (i_NumOfIterations == 0)

@@ -2,5 +2,6 @@
 
 void main(int argc, char* argv[])
 {
-	AlgoritmicFinal(argc, argv);
+	program AlgoFinal(argc, argv);
+	AlgoFinal.AlgoritmicFinal();
 }
