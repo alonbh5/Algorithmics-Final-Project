@@ -35,7 +35,7 @@ private:
 	void getEdgesFromFile(ifstream& in_file);
 	void checkValidVerticesAndWeightEdge(int i_VertexV, int i_VertexU, int i_WeightEdge, ifstream& in_file);
 	void checkFile(ifstream& in_file, string file_name);
-	void checkValidEntryInput(ifstream in_file);
+	void checkValidEntryInput(ifstream& in_file);
 };
 
 

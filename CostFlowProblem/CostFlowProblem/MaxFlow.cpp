@@ -13,7 +13,7 @@ MaxFlow::~MaxFlow()
 	delete m_Graph;
 }
 
-void MaxFlow::checkValidEntryInput(ifstream in_file)
+void MaxFlow::checkValidEntryInput(ifstream& in_file)
 {
 	in_file >> m_NumOfVertex >> m_NumOfEdges >> m_StartVertex >> m_EndVertex;
 
@@ -30,7 +30,7 @@ void MaxFlow::createGraphFromFile(string file_name)
 {
 	ifstream in_file(file_name, ios::in);
 	checkFile(in_file, file_name);
-	in_file >> m_NumOfVertex >> m_NumOfEdges >> m_StartVertex >> m_EndVertex; 
+	checkValidEntryInput(in_file);
 	m_Graph = new AdjancencyMatrix(m_NumOfVertex);
 	getEdgesFromFile(in_file);
 	in_file.close();
