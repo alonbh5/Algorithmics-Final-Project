@@ -1,4 +1,5 @@
 #include "MaxFlow.h"
+#include <algorithm>
 
 MaxFlow::MaxFlow(int argc, char* argv[])
 {
@@ -13,9 +14,12 @@ MaxFlow::~MaxFlow()
 	delete m_Graph;
 }
 
-void MaxFlow::checkValidEntryInput(ifstream& in_file)
+void MaxFlow::getAndCheckValidEntryInput(ifstream& in_file)
 {
-	in_file >> m_NumOfVertex >> m_NumOfEdges >> m_StartVertex >> m_EndVertex;
+	m_NumOfVertex = getValidInput(in_file);
+	m_NumOfEdges = getValidInput(in_file);
+	m_StartVertex = getValidInput(in_file);
+	m_EndVertex = getValidInput(in_file);
 
 	if (m_NumOfVertex < 1 || m_NumOfEdges >(m_NumOfVertex * m_NumOfVertex) || m_NumOfEdges < 0 || m_StartVertex > m_NumOfVertex || m_StartVertex < 1 || m_EndVertex > m_NumOfVertex || m_EndVertex < 1)
 	{
@@ -30,15 +34,15 @@ void MaxFlow::createGraphFromFile(string file_name)
 {
 	ifstream in_file(file_name, ios::in);
 	checkFile(in_file, file_name);
-	checkValidEntryInput(in_file);
+	getAndCheckValidEntryInput(in_file);
 	m_Graph = new AdjancencyMatrix(m_NumOfVertex);
 	getEdgesFromFile(in_file);
 	in_file.close();
 }
 
-void MaxFlow::checkValidVerticesAndWeightEdge(int i_VertexV, int i_VertexU, int i_WeightEdge, ifstream& in_file)
+void MaxFlow::checkValidVerticesAndWeightEdge(int i_VertexV, int i_VertexU, int i_WeightEdge, ifstream& in_file) const
 {
-	if (i_VertexU > m_NumOfVertex || i_VertexU < 0 || i_VertexV > m_NumOfVertex || i_VertexV < 0 || i_WeightEdge < 0 || i_VertexU == i_VertexV || m_Graph->GetMatrix()[i_VertexV - 1][i_VertexU - 1].isExist)
+	if (i_VertexU > m_NumOfVertex || i_VertexU < 0 || i_VertexV > m_NumOfVertex || i_VertexV < 0 || i_WeightEdge < 0 || i_VertexU == i_VertexV || m_Graph->GetMatrix()[i_VertexV][i_VertexU].isExist)
 	{
 		in_file.close();
 		cout << "Invalid Input!" << endl;
@@ -46,7 +50,7 @@ void MaxFlow::checkValidVerticesAndWeightEdge(int i_VertexV, int i_VertexU, int 
 	}
 }
 
-void MaxFlow::checkFile(ifstream& in_file, string file_name)
+void MaxFlow::checkFile(ifstream& in_file, string file_name) const
 {
 	if (!in_file)
 	{
@@ -55,17 +59,37 @@ void MaxFlow::checkFile(ifstream& in_file, string file_name)
 	}
 }
 
+int MaxFlow::getValidInput(ifstream& in_file)
+{
+	
+	string input;
+	in_file >> input;
+	if (!input.empty() && std::all_of(input.begin(), input.end(), ::isdigit))
+	{
+		return atoi(input.c_str());
+	}	
+	
+	in_file.close();
+	cout << "Invalid Input!" << endl;
+	exit(1);
+	
+}
+
 void MaxFlow::getEdgesFromFile(ifstream& in_file)
 {
 	int currNumOfEdges = 0, vertexV, vertexU, weightEdge;
 
-	for (int i = 0; i < m_NumOfEdges || in_file.eof(); i++)
+	for (int i = 0; i < m_NumOfEdges && !in_file.eof(); i++)
 	{
-		in_file >> vertexV >> vertexU >> weightEdge;
-		checkValidVerticesAndWeightEdge(vertexV, vertexU, weightEdge, in_file);
+		vertexV=getValidInput(in_file);
+		vertexU=getValidInput(in_file);
+		weightEdge=getValidInput(in_file);
+
+		checkValidVerticesAndWeightEdge(vertexV-1, vertexU-1, weightEdge, in_file);
 		m_Graph->AddEdge(vertexV - 1, vertexU - 1, weightEdge);
 		currNumOfEdges++;
 	}
+
 	if (currNumOfEdges != m_NumOfEdges)
 	{
 		in_file.close();
@@ -80,20 +104,20 @@ void MaxFlow::getEdgesFromFile(ifstream& in_file)
 void MaxFlow::RunByBFS()
 {
 	BFS myBFS(m_NumOfVertex);
-	AdjancencyMatrix GraphResidual(m_NumOfVertex);
+	AdjancencyMatrix GraphResidual(m_NumOfVertex); //n2
 	List* minCutS, *minCutT, *improvePath = nullptr;
 	int numOfIterations = 0, maxFlow;
-	GraphResidual.MakeGraphResidual(*m_Graph);
+	GraphResidual.MakeGraphResidual(*m_Graph); //n2
 
 	do {
 		if (improvePath)
 			delete improvePath;
 
-		myBFS.RunBFS(GraphResidual, m_StartVertex);
-		improvePath = myBFS.FindImprovePath(m_EndVertex);
-		addResidualFlowToEdgesOfTheImprovePath(improvePath, GraphResidual, numOfIterations);
+		myBFS.RunBFS(GraphResidual, m_StartVertex); //n+m = n2
+		improvePath = myBFS.FindImprovePath(m_EndVertex); //n
+		addResidualFlowToEdgesOfTheImprovePath(improvePath, GraphResidual, numOfIterations); //n
 		
-	} while (improvePath);
+	} while (improvePath); //n
 
 	getResultParametersByBFS(myBFS, GraphResidual, minCutS, minCutT, maxFlow);
 	printResultOfMaxFlowProblem(minCutS, minCutT, maxFlow, numOfIterations, "BFS Method");
@@ -117,7 +141,7 @@ void MaxFlow::RunByDijkstra()
 	do {
 		if (improvePath)
 			delete improvePath;
-		myDijkstra.RunDijkstra(GraphResidual, m_StartVertex);
+		myDijkstra.RunDijkstra(GraphResidual, m_StartVertex); //-(n+m)logn
 		improvePath = myDijkstra.FindImprovePath(m_EndVertex);
 		addResidualFlowToEdgesOfTheImprovePath(improvePath, GraphResidual, numOfIterations);
 	} while (improvePath);
@@ -183,7 +207,7 @@ int MaxFlow::findMinResidual(List* i_Path, AdjancencyMatrix& i_Graph)
 
 //----------------------------------------------------------------//
 
-void MaxFlow::printResultOfMaxFlowProblem(List* i_GroupS, List* i_GroupT, int i_MaxFlow, int i_NumOfIterations, string i_MethodName)
+void MaxFlow::printResultOfMaxFlowProblem(List* i_GroupS, List* i_GroupT, int i_MaxFlow, int i_NumOfIterations, string i_MethodName) const
 {
 	cout << i_MethodName << endl;
 	if (i_NumOfIterations == 0)

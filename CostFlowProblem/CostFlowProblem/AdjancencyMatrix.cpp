@@ -84,34 +84,10 @@ void AdjancencyMatrix::RemoveEdge(const int i_U, const int i_V)
 }
 
 
-void AdjancencyMatrix::MakeGraphResidual(const AdjancencyMatrix& i_Other)
+void AdjancencyMatrix::MakeGraphResidual(const AdjancencyMatrix& io_Other)
 {
-	this->m_NumOfVertex = i_Other.m_NumOfVertex;	
-	for (int i = 0; i < this->m_NumOfVertex; i++)
-	{		
-		for (int j = 0; j < this->m_NumOfVertex; j++)
-		{
-			if (i_Other.m_Matrix[i][j].maxFlow != 0)
-			{
-				this->m_Matrix[i][j] = i_Other.m_Matrix[i][j];
-			}
-		}
-	}
-
-	for (int i = 0; i < this->m_NumOfVertex; i++)
-	{
-		for (int j = 0; j < this->m_NumOfVertex; j++)
-		{
-			if (this->m_Matrix[i][j].isExist && !this->m_Matrix[j][i].isExist)
-			{
-				//anti mkbila
-				this->m_Matrix[j][i].isExist = true;				
-				this->m_Matrix[j][i].currentFlow = this->m_Matrix[i][j].maxFlow * -1;
-				this->m_Matrix[j][i].maxFlow = 0;
-				this->m_Matrix[j][i].residualFlow = this->m_Matrix[j][i].maxFlow - this->m_Matrix[j][i].currentFlow;
-			}
-		}
-	}
+	copyOnlyPostiveMaxFlowEdges(io_Other);
+	addAntiEdges();
 }
 
 void AdjancencyMatrix::AddFlow(const List* i_Path, const int i_ResidualFlow)
@@ -147,6 +123,39 @@ int AdjancencyMatrix::MaxFlow(const int S) const
 	}
 	delete adjList;
 	return maxFlow;
+}
+
+void AdjancencyMatrix::copyOnlyPostiveMaxFlowEdges(const AdjancencyMatrix& i_Other)
+{
+	this->m_NumOfVertex = i_Other.m_NumOfVertex;
+	for (int i = 0; i < this->m_NumOfVertex; i++)
+	{
+		for (int j = 0; j < this->m_NumOfVertex; j++)
+		{
+			if (i_Other.m_Matrix[i][j].maxFlow != 0)
+			{
+				this->m_Matrix[i][j] = i_Other.m_Matrix[i][j];
+			}
+		}
+	}
+}
+
+void AdjancencyMatrix::addAntiEdges()
+{
+	for (int i = 0; i < this->m_NumOfVertex; i++)
+	{
+		for (int j = 0; j < this->m_NumOfVertex; j++)
+		{
+			if (this->m_Matrix[i][j].isExist && !this->m_Matrix[j][i].isExist)
+			{
+				//anti mkbila
+				this->m_Matrix[j][i].isExist = true;
+				this->m_Matrix[j][i].currentFlow = this->m_Matrix[i][j].maxFlow * -1;
+				this->m_Matrix[j][i].maxFlow = 0;
+				this->m_Matrix[j][i].residualFlow = this->m_Matrix[j][i].maxFlow - this->m_Matrix[j][i].currentFlow;
+			}
+		}
+	}
 }
 
 

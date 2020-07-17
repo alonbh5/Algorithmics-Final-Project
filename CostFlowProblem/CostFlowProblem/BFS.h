@@ -17,9 +17,9 @@ public:
 	BFS(const int i_NumOfVertices);
 	~BFS();
 	void RunBFS(AdjancencyMatrix& i_Graph, const int i_S);
-	List* FindImprovePath(const int i_T);
-	List* MinCutGroupS(const int i_S);
-	List* MinCutGroupT(const int i_T);
+	List* FindImprovePath(const int i_T) const;
+	List* MinCutGroupS(const int i_S) const;
+	List* MinCutGroupT(const int i_T) const;
 
 private:
 	void initialize(Queue& io_Q, const int io_S, int& io_U);

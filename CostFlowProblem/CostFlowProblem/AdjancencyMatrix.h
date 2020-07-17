@@ -22,7 +22,7 @@ public:
 	~AdjancencyMatrix();
 
 	void MakeEmptyGraph();	
-	void MakeGraphResidual(const AdjancencyMatrix& i_Other);
+	void MakeGraphResidual(const AdjancencyMatrix& io_Other);
 
 	EdgeInfo** GetMatrix() const;
 	int GetNumOfVertex() const;
@@ -34,6 +34,10 @@ public:
 	void RemoveEdge(const int i_U, const int i_V);
 	void AddFlow(const List* i_Path, const int i_ResidualFlow);
 	int MaxFlow(const int S) const;
+
+private:
+	void copyOnlyPostiveMaxFlowEdges(const AdjancencyMatrix& i_Other);
+	void addAntiEdges();
 };
 
 #endif // !_AdjancencyMatrix_H_

@@ -1,13 +1,13 @@
 #ifndef _HEAPMAX_H_
 #define _HEAPMAX_H_
 
-//#pragma warning (disable:4996)
 #include <iostream>
 using namespace std;
 
 class HeapMax
 {
 private:
+	const static int NOT_FOUND = -1;
 	pair <int, int>* m_Data;
 	int m_MaxSize;
 	int m_HeapSize;
@@ -16,8 +16,7 @@ private:
 public:
 	HeapMax(const int i_MaxSize);
 	~HeapMax();
-	bool IsEmpty() const;
-	void makeEmpty(const int i_MaxSize);
+	bool IsEmpty() const;	
 	int Max() const;
 	int DeleteMax();
 	void Insert(const int i_Data, const int i_Key);
@@ -31,6 +30,7 @@ private:
 	static int parent(const int i_NodeIdx);
 	void fixHeap(const int i_NodeIdx);
 	void createArrPairs(const int* i_DataArr, const int i_ArrSize);
+	void makeEmpty(const int i_MaxSize);
 };
 
 #endif // !_HEAPMAX_H_

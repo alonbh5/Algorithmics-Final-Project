@@ -88,13 +88,16 @@ int HeapMax::DeleteMax()
 void HeapMax::Insert(const int i_Data, const int i_Key)
 {
 	pair <int, int> newPair(i_Key, i_Data);
+
 	if (m_HeapSize == m_MaxSize)
 	{
 		cout << "Error: HEAP FULL\n";
 		exit(1);
 	}
+
 	int i = m_HeapSize;
 	m_HeapSize++;
+
 	while ((i > 0) && (m_Data[parent(i)].first < newPair.first))
 	{
 		m_Data[i] = m_Data[parent(i)];
@@ -144,5 +147,5 @@ int HeapMax::FindPlaceOfKey(const int i_Data) const
 			return i;
 		}
 	}
-	return -1;
+	return NOT_FOUND;
 }

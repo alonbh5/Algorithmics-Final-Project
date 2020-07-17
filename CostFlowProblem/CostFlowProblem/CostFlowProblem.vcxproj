@@ -27,7 +27,6 @@
     <ClInclude Include="Node.h" />
     <ClInclude Include="MaxFlow.h" />
     <ClInclude Include="Queue.h" />
-    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AdjancencyMatrix.cpp" />
@@ -41,7 +40,7 @@
     <ClCompile Include="Queue.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="CostFlowProblem.rc" />
+    <Text Include="..\..\..\..\..\Desktop\Efficiency .txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

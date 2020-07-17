@@ -22,22 +22,22 @@ BFS::~BFS()
 
 void BFS::RunBFS(AdjancencyMatrix& i_Graph, int i_S)
 {
-	int u, currVertex;
+	int vertexU, currVertex;
 	Queue Q;
-	initialize(Q, i_S, u);
+	initialize(Q, i_S, vertexU);
 
 	while (!Q.IsEmpty())
 	{
-		u = Q.DeQueue();
-		List* adjList = i_Graph.GetAdjListByResidual(u);
+		vertexU = Q.DeQueue();
+		List* adjList = i_Graph.GetAdjListByResidual(vertexU);
 		Node* currNode = adjList->GetHead();
 		while (currNode)
 		{
 			currVertex=currNode->GetData();
 			if (m_Degree[currVertex] == Infinity)
 			{
-				m_Degree[currVertex] = m_Degree[u] + 1;
-				m_Parent[currVertex] = u;
+				m_Degree[currVertex] = m_Degree[vertexU] + 1;
+				m_Parent[currVertex] = vertexU;
 				Q.EnQueue(currVertex);
 			}
 			currNode = currNode->GetNext();
@@ -59,7 +59,7 @@ void BFS::initialize(Queue& io_Q, const int io_S, int& io_U)
 }
 
 
-List* BFS::FindImprovePath(const int i_T)
+List* BFS::FindImprovePath(const int i_T) const
 {
 	List* path = nullptr;
 	int currV = i_T;
@@ -76,7 +76,7 @@ List* BFS::FindImprovePath(const int i_T)
 	return path;
 }
 
-List* BFS::MinCutGroupS(const int i_S)
+List* BFS::MinCutGroupS(const int i_S) const
 {
 	List* minCutGroupS = new List();
 	for (int i = 0; i < m_Size; i++)
@@ -89,7 +89,7 @@ List* BFS::MinCutGroupS(const int i_S)
 	return minCutGroupS;
 }
 
-List* BFS::MinCutGroupT(const int i_T)
+List* BFS::MinCutGroupT(const int i_T) const
 {
 	List* minCutGroupT = new List();
 	for (int i = 0; i < m_Size; i++)

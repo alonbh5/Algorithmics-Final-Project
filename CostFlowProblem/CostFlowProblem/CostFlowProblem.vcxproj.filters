@@ -33,9 +33,6 @@
     <ClInclude Include="AdjancencyMatrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Dijkstra.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -73,8 +70,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="CostFlowProblem.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
+    <Text Include="..\..\..\..\..\Desktop\Efficiency .txt" />
   </ItemGroup>
 </Project>

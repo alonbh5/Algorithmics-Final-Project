@@ -4,14 +4,14 @@
 
 Dijkstra::Dijkstra(int i_NumOfVertices)
 {
-	this->m_Degree = new int[i_NumOfVertices];
+	this->m_MaxFlowFromS = new int[i_NumOfVertices];
 	this->m_Parent = new int[i_NumOfVertices];
 	this->m_Size = i_NumOfVertices;
 }
 
 Dijkstra::~Dijkstra()
 {
-	delete[] m_Degree;
+	delete[] m_MaxFlowFromS;
 	delete[] m_Parent;
 }
 
@@ -22,7 +22,7 @@ void Dijkstra::RunDijkstra(AdjancencyMatrix& i_Graph, int i_S)
 	HeapMax Q(m_Size);
 	List* AdjList;
 	Node* currNode;
-	Q.Build(m_Degree, m_Size);
+	Q.Build(m_MaxFlowFromS, m_Size);
 
 	while (!Q.IsEmpty())
 	{
@@ -32,7 +32,7 @@ void Dijkstra::RunDijkstra(AdjancencyMatrix& i_Graph, int i_S)
 		while (currNode)
 		{
 			vertexV = currNode->GetData();
-			if (m_Degree[vertexU] != Infinity)
+			if (m_MaxFlowFromS[vertexU] != Infinity)
 			{
 				relax(vertexU, vertexV, i_S, i_Graph, Q);
 			}
@@ -45,68 +45,48 @@ void Dijkstra::RunDijkstra(AdjancencyMatrix& i_Graph, int i_S)
 
 void Dijkstra::relax(int i_U, int i_V, int i_S, AdjancencyMatrix& Graph, HeapMax& Q)
 {
-	int val;
+	int val;	
 	int loctionInHeap = Q.FindPlaceOfKey(i_V);
+	bool shouldUpdate = false;
 
-
-	if (m_Degree[i_V] == Infinity && i_U == i_S)
+	if (m_MaxFlowFromS[i_U] < Graph.GetMatrix()[i_U][i_V].residualFlow && i_U != i_S)
 	{
-		m_Degree[i_V] = Graph.GetMatrix()[i_U][i_V].residualFlow;
-		m_Parent[i_V] = i_U;
-		Q.IncreaseKey(loctionInHeap, m_Degree[i_V]);
-	}
-	else if (m_Degree[i_V] == Infinity && i_U != i_S)
-	{
-		if (m_Degree[i_U] < Graph.GetMatrix()[i_U][i_V].residualFlow)
-		{
-			val = m_Degree[i_U];
-		}
-		else
-		{
-			val = Graph.GetMatrix()[i_U][i_V].residualFlow;
-		}
-		m_Degree[i_V] = val;
-		m_Parent[i_V] = i_U;
-		Q.IncreaseKey(loctionInHeap, m_Degree[i_V]);
+		val = m_MaxFlowFromS[i_U];
 	}
 	else
 	{
-		if (m_Degree[i_U] < Graph.GetMatrix()[i_U][i_V].residualFlow)
-		{
-			val = m_Degree[i_U];
-		}
-		else
-		{
-			val = Graph.GetMatrix()[i_U][i_V].residualFlow;
-		}
+		val = Graph.GetMatrix()[i_U][i_V].residualFlow;
+	}
 
-		if (m_Degree[i_V] < val && i_V != i_S)
-		{
-			m_Degree[i_V] = val;
-			m_Parent[i_V] = i_U;
-			Q.IncreaseKey(loctionInHeap, m_Degree[i_V]);
-		}
+	if (m_MaxFlowFromS[i_V] == Infinity)
+	{
+		shouldUpdate = true;
+	}
+	else if (m_MaxFlowFromS[i_V] < val && i_V != i_S)
+	{
+		shouldUpdate = true;
+	}
+
+	if (shouldUpdate)
+	{
+		m_MaxFlowFromS[i_V] = val;
+		m_Parent[i_V] = i_U;
+		Q.IncreaseKey(loctionInHeap, m_MaxFlowFromS[i_V]);
 	}
 }
-
-
-
-
 
 void Dijkstra::initialize(const int i_S)
 {
 	for (int i = 0; i < m_Size; i++)
 	{
-		m_Degree[i] = Infinity;
+		m_MaxFlowFromS[i] = Infinity;
 		m_Parent[i] = Infinity;
 	}
-	m_Degree[i_S] = 0;
-	
+	m_MaxFlowFromS[i_S] = 0;	
 }
 
 
-
-List* Dijkstra::FindImprovePath(const int i_T) 
+List* Dijkstra::FindImprovePath(const int i_T) const
 {
 	List* path = nullptr;
 	int currV = i_T;
@@ -118,18 +98,19 @@ List* Dijkstra::FindImprovePath(const int i_T)
 		{
 			path->InsertToHead(m_Parent[currV]);
 			currV = m_Parent[currV];
-		}
-		//cout << *path << endl;
+		}	
+		cout << *path << endl;
 	}
+
 	return path;
 }
 
-List* Dijkstra::MinCutGroupS(const int i_S)  //change for check
+List* Dijkstra::MinCutGroupS(const int i_S) const
 {
 	List* minCutGroupS = new List();
 	for (int i = 0; i < m_Size; i++)
 	{
-		if (m_Degree[i] != Infinity)
+		if (m_MaxFlowFromS[i] != Infinity)
 		{
 			minCutGroupS->InsertToTail(i + 1);
 		}
@@ -137,12 +118,12 @@ List* Dijkstra::MinCutGroupS(const int i_S)  //change for check
 	return minCutGroupS;
 }
 
-List* Dijkstra::MinCutGroupT(const int i_T)
+List* Dijkstra::MinCutGroupT(const int i_T) const
 {
 	List* minCutGroupT = new List();
 	for (int i = 0; i < m_Size; i++)
 	{
-		if (m_Degree[i] == Infinity)
+		if (m_MaxFlowFromS[i] == Infinity)
 		{
 			minCutGroupT->InsertToTail(i + 1);
 		}
