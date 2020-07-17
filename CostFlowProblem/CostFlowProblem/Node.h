@@ -1,6 +1,6 @@
-#ifndef _NODE_H
-#define _NODE_H
-#pragma warning (disable:4996)
+#ifndef _NODE_H_
+#define _NODE_H_
+
 #include <iostream>
 using namespace std;
 class Node
@@ -21,4 +21,4 @@ public:
 	friend ostream& operator<<(ostream& i_os, const Node& i_obj);
 };
 
-#endif // !_NODE_H
+#endif // !_NODE_H_

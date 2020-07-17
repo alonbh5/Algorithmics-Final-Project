@@ -1,9 +1,10 @@
-#include "Program.h"
+#include "MaxFlow.h"
 
-void main(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
-	program AlgoFinal(argc, argv);
-	AlgoFinal.AlgoritmicFinal();
+	MaxFlow AlgoFinal(argc, argv);
+	AlgoFinal.RunByBFS();
+	AlgoFinal.RunByDijkstra();
 }
 
 ////====================== שאלות לפורום   =========================== //
@@ -13,7 +14,7 @@ void main(int argc, char* argv[])
 	//מסמך ללא פרמטרים מיותרים בסוף או משהו כזה.	
 	//מותר סטרינג?
 	// ================================================================== //
-
+	//relax - make it shorter
 	//Recheck The function - Const, Good Naming, Code Reuse and Efficiency of the methods.
 	//Arrange the Program class - mayble to open AUXILARY Class with all the other methods (or put them as static function in the classes)
 

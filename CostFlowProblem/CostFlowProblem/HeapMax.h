@@ -1,5 +1,5 @@
-#ifndef _HEAPMAX_H
-#define _HEAPMAX_H
+#ifndef _HEAPMAX_H_
+#define _HEAPMAX_H_
 
 //#pragma warning (disable:4996)
 #include <iostream>
@@ -33,4 +33,4 @@ private:
 	void createArrPairs(const int* i_DataArr, const int i_ArrSize);
 };
 
-#endif // !_HEAPMAX_H
+#endif // !_HEAPMAX_H_

@@ -1,5 +1,5 @@
-#ifndef _DIJKSTRA_H
-#define _DIJKSTRA_H
+#ifndef _DIJKSTRA_H_
+#define _DIJKSTRA_H_
 
 #include "HeapMax.h"
 #include "AdjancencyMatrix.h"

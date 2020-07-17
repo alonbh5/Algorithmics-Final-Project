@@ -1,5 +1,5 @@
-#ifndef _QUEUE_H
-#define _QUEUE_H
+#ifndef _QUEUE_H_
+#define _QUEUE_H_
 
 #include "Node.h"
 #include <iostream>
@@ -23,4 +23,4 @@ public:
 	int DeQueue(); 
 };
 
-#endif // !_QUEUE_H
+#endif // !_QUEUE_H_

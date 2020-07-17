@@ -25,7 +25,7 @@
     <ClInclude Include="HeapMax.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="Node.h" />
-    <ClInclude Include="Program.h" />
+    <ClInclude Include="MaxFlow.h" />
     <ClInclude Include="Queue.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
@@ -37,7 +37,7 @@
     <ClCompile Include="List.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Node.cpp" />
-    <ClCompile Include="Program.cpp" />
+    <ClCompile Include="MaxFlow.cpp" />
     <ClCompile Include="Queue.cpp" />
   </ItemGroup>
   <ItemGroup>

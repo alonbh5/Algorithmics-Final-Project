@@ -41,19 +41,6 @@ void Dijkstra::RunDijkstra(AdjancencyMatrix& i_Graph, int i_S)
 		}
 		delete AdjList;
 	}
-	//cout << "==============" << endl;
-	//for (int i = 0; i < m_Size; i++)
-	//{
-	//	cout << i << ": " << m_Degree[i] << " ";
-	//}
-	//cout << endl << endl;
-	//for (int i = 0; i < m_Size; i++)
-	//{
-	//	cout << i << ": " << m_Parent[i] << " ";
-	//}
-	//cout << endl << endl;
-
-
 }
 
 void Dijkstra::relax(int i_U, int i_V, int i_S, AdjancencyMatrix& Graph, HeapMax& Q)

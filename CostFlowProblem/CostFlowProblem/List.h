@@ -1,5 +1,5 @@
-#ifndef _LIST_H
-#define _LIST_H
+#ifndef _LIST_H_
+#define _LIST_H_
 #pragma warning (disable:4996)
 
 #include <iostream>
@@ -25,4 +25,4 @@ public:
 };
 
 
-#endif // !_LIST_H
+#endif // !_LIST_H_
