@@ -2,7 +2,7 @@
 
 List::List()
 {
-	MakeEmpty();
+	makeEmpty();
 }
 
 List::~List()
@@ -25,11 +25,12 @@ List::~List()
 
 }
 
-void List::MakeEmpty()
-{
+void List::makeEmpty()
+{	
 	m_Head = nullptr;
 	m_Tail = nullptr;
 }
+
 
 bool List::IsEmpty() const
 {

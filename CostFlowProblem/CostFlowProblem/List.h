@@ -15,13 +15,15 @@ private:
 public:
 	List();
 	~List();
-	bool IsEmpty() const;
-	void MakeEmpty();
+	bool IsEmpty() const;	
 	void InsertToTail(int data);
 	void InsertToHead(int data);
 	Node* GetHead() const;
 	Node* GetTail() const;
 	friend ostream& operator<<(ostream& os, const List& obj);
+
+private:
+	void makeEmpty();
 };
 
 

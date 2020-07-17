@@ -27,7 +27,6 @@ void Queue::MakeEmpty()
 		}
 		m_Tail = m_Head;
 	}
-
 }
 
 bool Queue::IsEmpty() const
@@ -45,9 +44,9 @@ int Queue::Front() const
 	return (m_Head->GetNext()->GetData());
 }
 
-void Queue::EnQueue(const int i_Utem)
+void Queue::EnQueue(const int i_Item)
 {
-	Node* newnode = new Node(i_Utem);
+	Node* newnode = new Node(i_Item);
 	m_Tail->InsertAfter(newnode);
 	m_Tail = newnode;
 }

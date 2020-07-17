@@ -25,12 +25,6 @@ AdjancencyMatrix::AdjancencyMatrix(const AdjancencyMatrix& i_Other)
 	}
 }
 
-AdjancencyMatrix::AdjancencyMatrix(AdjancencyMatrix&& i_Other)
-{
-	this->m_Matrix = i_Other.m_Matrix;
-	this->m_NumOfVertex = i_Other.m_NumOfVertex;
-	i_Other.m_Matrix = nullptr;
-}
 
 AdjancencyMatrix::~AdjancencyMatrix()
 {
@@ -89,18 +83,6 @@ void AdjancencyMatrix::RemoveEdge(const int i_U, const int i_V)
 	m_Matrix[i_U][i_V].isExist = false;
 }
 
-void AdjancencyMatrix::InitFlow()
-{
-	for (int i = 0; i < m_NumOfVertex; i++)
-	{
-		for (int j = 0; j < m_NumOfVertex; j++)
-		{
-			if(m_Matrix[i][j].isExist)
-				m_Matrix[i][j].currentFlow = 0;
-		}
-	}
-}
-
 
 void AdjancencyMatrix::MakeGraphResidual(const AdjancencyMatrix& i_Other)
 {
@@ -115,6 +97,7 @@ void AdjancencyMatrix::MakeGraphResidual(const AdjancencyMatrix& i_Other)
 			}
 		}
 	}
+
 	for (int i = 0; i < this->m_NumOfVertex; i++)
 	{
 		for (int j = 0; j < this->m_NumOfVertex; j++)

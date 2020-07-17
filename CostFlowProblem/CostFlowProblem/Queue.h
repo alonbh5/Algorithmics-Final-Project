@@ -4,7 +4,7 @@
 #include "Node.h"
 #include <iostream>
 #include <stdlib.h>
-//#pragma warning (disable: 4996)
+
 
 class Queue
 {

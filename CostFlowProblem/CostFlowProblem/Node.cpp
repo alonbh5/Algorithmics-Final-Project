@@ -22,7 +22,7 @@ int Node::GetData() const
 	return m_Data;
 }
 
-Node* Node::GetNext() 
+Node* Node::GetNext()
 {
 	return m_Next;
 }
