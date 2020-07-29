@@ -16,16 +16,15 @@ MaxFlow::~MaxFlow()
 
 void MaxFlow::getAndCheckValidEntryInput(ifstream& in_file)
 {
-	m_NumOfVertex = getValidInput(in_file);
-	m_NumOfEdges = getValidInput(in_file);
-	m_StartVertex = getValidInput(in_file);
-	m_EndVertex = getValidInput(in_file);
+
+	m_NumOfVertex = getASingleValidInput(in_file);
+	m_NumOfEdges = getASingleValidInput(in_file);
+	m_StartVertex = getASingleValidInput(in_file);
+	m_EndVertex = getASingleValidInput(in_file);
 
 	if (m_NumOfVertex < 1 || m_NumOfEdges >(m_NumOfVertex * m_NumOfVertex) || m_NumOfEdges < 0 || m_StartVertex > m_NumOfVertex || m_StartVertex < 1 || m_EndVertex > m_NumOfVertex || m_EndVertex < 1)
 	{
-		in_file.close();
-		cout << "Invalid Input!" << endl;
-		exit(1);
+		errorMsgAndExitProgram(in_file);
 	}
 }
 
@@ -44,9 +43,7 @@ void MaxFlow::checkValidVerticesAndWeightEdge(int i_VertexV, int i_VertexU, int 
 {
 	if (i_VertexU > m_NumOfVertex || i_VertexU < 0 || i_VertexV > m_NumOfVertex || i_VertexV < 0 || i_WeightEdge < 0 || i_VertexU == i_VertexV || m_Graph->GetMatrix()[i_VertexV][i_VertexU].isExist)
 	{
-		in_file.close();
-		cout << "Invalid Input!" << endl;
-		exit(1);
+		errorMsgAndExitProgram(in_file);
 	}
 }
 
@@ -59,42 +56,121 @@ void MaxFlow::checkFile(ifstream& in_file, string file_name) const
 	}
 }
 
-int MaxFlow::getValidInput(ifstream& in_file)
-{
-	
-	string input;
-	in_file >> input;
-	if (!input.empty() && std::all_of(input.begin(), input.end(), ::isdigit))
+int MaxFlow::getASingleValidInput(ifstream& in_file)
+{	
+	string currLine;
+	getline(in_file, currLine); 
+	trim(currLine);
+	if (!isTheStringContainsOnlyDigits(currLine))
 	{
-		return atoi(input.c_str());
-	}	
-	
+		errorMsgAndExitProgram(in_file);
+	}
+	return atoi(currLine.c_str());
+}
+
+bool MaxFlow::isTheStringContainsOnlyDigits(string i_Str)
+{
+	if (!i_Str.empty() && std::all_of(i_Str.begin(), i_Str.end(), ::isdigit))
+	{
+		return true;
+	}
+	return false;
+}
+
+void MaxFlow::checkIfLineContinesThreeTokens(ifstream& in_file)
+{
+	int countNumOfString = 0;
+	bool flag = true;
+	char* token, * currLineAsChars;
+	string currLineAsString;
+
+	getline(in_file, currLineAsString);
+	trim(currLineAsString);
+	currLineAsChars = strdup(currLineAsString.c_str());
+	token = strtok(currLineAsChars, " ");
+
+	while (token != NULL)
+	{
+		countNumOfString++;
+		if (!isTheStringContainsOnlyDigits(token))
+		{
+			errorMsgAndExitProgram(in_file);
+			flag = false;
+			break;
+		}
+		token = strtok(NULL, " ");
+	}
+
+	if (countNumOfString != 3 || !flag)
+	{
+		errorMsgAndExitProgram(in_file);
+	}
+}
+
+void MaxFlow::trim(string& io_str)
+{
+	ltrim(io_str);
+	rtrim(io_str);
+}
+
+void MaxFlow::ltrim(string& io_str)
+{
+	char WHITESPACE = ' ';
+	int len = io_str.length();
+	for (int i = 0; i < len; i++)
+	{
+		if (io_str[i] != WHITESPACE)
+		{
+			io_str.erase(0, i);
+			break;
+		}
+	}
+}
+
+void MaxFlow::rtrim(string& io_str)
+{
+	char WHITESPACE = ' ';
+	int len = io_str.length();
+	for (int  i = len-1; i >= 0; i--)
+	{
+		if (io_str[i] != WHITESPACE)
+		{
+			int begin = i + 1;
+			int end = len - 1;
+			io_str.erase(begin, end);
+			break;
+		}
+	}
+}
+
+void MaxFlow::errorMsgAndExitProgram(ifstream& in_file) const
+{
 	in_file.close();
 	cout << "Invalid Input!" << endl;
 	exit(1);
-	
 }
 
 void MaxFlow::getEdgesFromFile(ifstream& in_file)
 {
 	int currNumOfEdges = 0, vertexV, vertexU, weightEdge;
-
+	string extraData, EMPTYSTRING = "";
+	streampos currFilePosition;
 	for (int i = 0; i < m_NumOfEdges && !in_file.eof(); i++)
 	{
-		vertexV=getValidInput(in_file);
-		vertexU=getValidInput(in_file);
-		weightEdge=getValidInput(in_file);
-
+		currFilePosition= in_file.tellg();
+		checkIfLineContinesThreeTokens(in_file);
+		in_file.seekg(currFilePosition);
+		in_file >> vertexV >> vertexU >> weightEdge;
+		getline(in_file, extraData);
 		checkValidVerticesAndWeightEdge(vertexV-1, vertexU-1, weightEdge, in_file);
 		m_Graph->AddEdge(vertexV - 1, vertexU - 1, weightEdge);
 		currNumOfEdges++;
 	}
 
-	if (currNumOfEdges != m_NumOfEdges)
+	in_file >> extraData;
+	if (currNumOfEdges != m_NumOfEdges || extraData!= EMPTYSTRING)
 	{
-		in_file.close();
-		cout << "Invalid Input!" << endl;
-		exit(1);
+		errorMsgAndExitProgram(in_file);
 	}
 }
 

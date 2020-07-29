@@ -99,7 +99,6 @@ List* Dijkstra::FindImprovePath(const int i_T) const
 			path->InsertToHead(m_Parent[currV]);
 			currV = m_Parent[currV];
 		}	
-		cout << *path << endl;
 	}
 
 	return path;
